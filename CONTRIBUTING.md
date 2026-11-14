@@ -1,6 +1,6 @@
-# Contributing to Llamadeck
+# Contributing to SFRP
 
-Thank you for considering contributing to Llamadeck! This document outlines the development setup and contribution process.
+Thank you for considering contributing to SFRP! This document outlines the development setup and contribution process.
 
 ## Development Setup
 
@@ -14,8 +14,8 @@ Thank you for considering contributing to Llamadeck! This document outlines the 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/lordmathis/llamadeck.git
-   cd llamadeck
+   git clone https://github.com/lordmathis/sfrp.git
+   cd sfrp
    ```
 
 2. **Install dependencies**
@@ -68,7 +68,7 @@ All the following must pass:
    go test ./... -v
    go test -race ./... -v
    go fmt ./... && go vet ./...
-   go build -o llamadeck ./cmd/server
+   go build -o sfrp ./cmd/server
    ```
 
 2. **Frontend**
@@ -179,8 +179,8 @@ Documentation is automatically built and deployed to GitHub Pages when changes a
 
 ## Getting Help
 
-- Check existing [issues](https://github.com/lordmathis/llamadeck/issues)
+- Check existing [issues](https://github.com/lordmathis/sfrp/issues)
 - Review the [README.md](README.md) for usage documentation  
 - Look at existing code for patterns and conventions
 
-Thank you for contributing to Llamadeck!
+Thank you for contributing to SFRP!
