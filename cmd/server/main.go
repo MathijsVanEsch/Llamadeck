@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/database"
-	"llamadeck/pkg/manager"
-	"llamadeck/pkg/models"
-	"llamadeck/pkg/server"
+	"sfrp/pkg/config"
+	"sfrp/pkg/database"
+	"sfrp/pkg/manager"
+	"sfrp/pkg/models"
+	"sfrp/pkg/server"
 	"log"
 	"net/http"
 	"os"
@@ -21,9 +21,9 @@ var version string = "unknown"
 var commitHash string = "unknown"
 var buildTime string = "unknown"
 
-// @title llamadeck API
+// @title sfrp API
 // @version 1.0
-// @description llamadeck is a control server for managing Llama Server instances.
+// @description sfrp is a control server for managing Llama Server instances.
 // @license.name MIT License
 // @license.url https://opensource.org/license/mit/
 // @basePath /api/v1
@@ -34,13 +34,13 @@ func main() {
 
 	// --version flag to print the version
 	if len(os.Args) > 1 && os.Args[1] == "--version" {
-		fmt.Printf("llamadeck version: %s\n", version)
+		fmt.Printf("sfrp version: %s\n", version)
 		fmt.Printf("Commit hash: %s\n", commitHash)
 		fmt.Printf("Build time: %s\n", buildTime)
 		return
 	}
 
-	configPath := os.Getenv("LLAMADECK_CONFIG_PATH")
+	configPath := os.Getenv("SFRP_CONFIG_PATH")
 	cfg, err := config.LoadConfig(configPath)
 	if err != nil {
 		log.Printf("Error loading config: %v\nUsing default configuration.", err)
@@ -111,7 +111,7 @@ func main() {
 	}
 
 	go func() {
-		log.Printf("Llamadeck server listening on %s:%d", cfg.Server.Host, cfg.Server.Port)
+		log.Printf("SFRP server listening on %s:%d", cfg.Server.Host, cfg.Server.Port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Printf("Error starting server: %v\n", err)
 		}
@@ -142,5 +142,5 @@ func main() {
 		log.Printf("Error closing database: %v\n", err)
 	}
 
-	log.Println("Exiting llamadeck.")
+	log.Println("Exiting sfrp.")
 }

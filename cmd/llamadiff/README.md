@@ -1,6 +1,6 @@
 # llamadiff - llama-server Flag Validator
 
-This tool validates that all flags supported by `llama-server` are properly handled by the llamadeck parser.
+This tool validates that all flags supported by `llama-server` are properly handled by the sfrp parser.
 
 ## Usage
 
