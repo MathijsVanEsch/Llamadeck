@@ -19,7 +19,7 @@ definitions:
       commit_hash:
         type: string
       data_dir:
-        description: Directory where all llamadeck data will be stored (database, instances,
+        description: Directory where all sfrp data will be stored (database, instances,
           logs, etc.)
         type: string
       database:
@@ -217,7 +217,7 @@ definitions:
           Override for IdPs that expose membership under a different claim (e.g. "roles").
         type: string
       issuer_url:
-        description: Issuer URL of the IdP, e.g. https://authentik.example/application/o/llamadeck/
+        description: Issuer URL of the IdP, e.g. https://authentik.example/application/o/sfrp/
         type: string
       redirect_url:
         description: |-
@@ -540,11 +540,11 @@ definitions:
     type: object
 info:
   contact: {}
-  description: llamadeck is a control server for managing Llama Server instances.
+  description: sfrp is a control server for managing Llama Server instances.
   license:
     name: MIT License
     url: https://opensource.org/license/mit/
-  title: llamadeck API
+  title: sfrp API
   version: "1.0"
 paths:
   /api/v1/auth/keys:
@@ -1616,7 +1616,7 @@ paths:
       - Nodes
   /api/v1/version:
     get:
-      description: Returns the version of the llamadeck command
+      description: Returns the version of the sfrp command
       responses:
         "200":
           description: Version information
@@ -1628,7 +1628,7 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: Get llamadeck version
+      summary: Get sfrp version
       tags:
       - System
   /llama-cpp/{name}/:

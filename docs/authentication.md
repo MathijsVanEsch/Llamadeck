@@ -1,6 +1,6 @@
 # Authentication
 
-Llamadeck controls access with three mechanisms:
+SFRP controls access with three mechanisms:
 
 - **Management API Key** — authenticates the web UI and management API (creating/stopping instances, managing keys). Configured in the config file or via environment variables; see the [Configuration](configuration.md#authentication-configuration) guide.
 - **Inference API Key** — authenticates OpenAI-compatible inference requests (`/v1/chat/completions`, `/v1/completions`, etc.). Created and managed via the web UI or management API and stored in the database.
@@ -133,8 +133,8 @@ The web UI can authenticate users through an OpenID Connect provider (Authentik,
 ```yaml
 auth:
   oidc:
-    issuer_url: "https://authentik.example.com/application/o/llamadeck/"  # IdP issuer URL
-    client_id: "llamadeck"                  # OAuth2 client ID registered with the IdP
+    issuer_url: "https://authentik.example.com/application/o/sfrp/"  # IdP issuer URL
+    client_id: "sfrp"                  # OAuth2 client ID registered with the IdP
     client_secret: "your-client-secret"    # OAuth2 client secret
     # redirect_url: ""                     # Optional; derived from the request when empty
     # scopes: [openid, profile, email]     # Default scopes
@@ -144,30 +144,30 @@ auth:
     # secure_cookie: true                  # Set false only for plain-HTTP LAN deployments
 ```
 
-Environment variable equivalents (`LLAMADECK_AUTH_OIDC_*`) are listed in the [configuration reference](configuration.md#oidc-sso-login).
+Environment variable equivalents (`SFRP_AUTH_OIDC_*`) are listed in the [configuration reference](configuration.md#oidc-sso-login).
 
 ### Setting up the IdP client
 
 1. Create a confidential OAuth2/OIDC client in your IdP (Authentik: provider type *OAuth2/OpenID Connect*; Keycloak: client with *Client authentication* enabled)
-2. Set the redirect URI to `https://<your-llamadeck-host>/api/v1/auth/oidc/callback` — under a subpath proxy, use the full external path
-3. Configure the `auth.oidc` block above and restart llamadeck. If discovery fails at startup (IdP unreachable, wrong issuer), llamadeck logs the error and runs without OIDC until the problem is fixed — management-key login keeps working.
+2. Set the redirect URI to `https://<your-sfrp-host>/api/v1/auth/oidc/callback` — under a subpath proxy, use the full external path
+3. Configure the `auth.oidc` block above and restart sfrp. If discovery fails at startup (IdP unreachable, wrong issuer), sfrp logs the error and runs without OIDC until the problem is fixed — management-key login keeps working.
 
 ### Restricting logins to specific groups
 
-By default, every user your IdP authenticates can log in. When the IdP serves more users than should have access to llamadeck, set `allowed_groups` to require membership in at least one listed group:
+By default, every user your IdP authenticates can log in. When the IdP serves more users than should have access to sfrp, set `allowed_groups` to require membership in at least one listed group:
 
 ```yaml
 auth:
   oidc:
-    allowed_groups: ["llamadeck-users"]
+    allowed_groups: ["sfrp-users"]
 ```
 
 - Groups are read from the ID token's `groups` claim (Authelia, Authentik, Keycloak, and Dex can all emit it — sometimes a mapper must be enabled). If your IdP exposes membership under a different claim, point `groups_claim` at it.
-- The check is fail-closed: if the claim is missing or unreadable, login is denied and the reason is logged with the claim names the token actually carried — check the llamadeck log if a legitimate user cannot get in.
-- Membership is evaluated at login only. Removing a user from the group does not terminate their existing session; access ends when the session expires (`session_ttl`, default 12h) or llamadeck restarts. Lower `session_ttl` if you need faster revocation.
+- The check is fail-closed: if the claim is missing or unreadable, login is denied and the reason is logged with the claim names the token actually carried — check the sfrp log if a legitimate user cannot get in.
+- Membership is evaluated at login only. Removing a user from the group does not terminate their existing session; access ends when the session expires (`session_ttl`, default 12h) or sfrp restarts. Lower `session_ttl` if you need faster revocation.
 
 ### Notes
 
-- Keep `require_management_auth: true` when enabling OIDC — otherwise management endpoints stay unauthenticated and login only adds session support. llamadeck logs a warning at startup for this combination.
+- Keep `require_management_auth: true` when enabling OIDC — otherwise management endpoints stay unauthenticated and login only adds session support. sfrp logs a warning at startup for this combination.
 - Behind a TLS-terminating reverse proxy, either forward `X-Forwarded-Proto`/`X-Forwarded-Host` or set `redirect_url` explicitly. Under a subpath proxy, set `redirect_url` to the full external callback path.
 - API keys created while logged in via SSO show the user's email as their owner.

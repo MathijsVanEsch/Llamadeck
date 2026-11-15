@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Issues specific to Llamadeck deployment and operation.
+Issues specific to SFRP deployment and operation.
 
 ## Configuration Issues
 
@@ -20,8 +20,8 @@ Issues specific to Llamadeck deployment and operation.
 
 2. Check data directory permissions:
    ```bash
-   # Ensure data directory is writable (default: ~/.local/share/llamadeck)
-   mkdir -p ~/.local/share/llamadeck/{instances,logs}
+   # Ensure data directory is writable (default: ~/.local/share/sfrp)
+   mkdir -p ~/.local/share/sfrp/{instances,logs}
    ```
 
 ## Instance Management Issues
@@ -36,7 +36,7 @@ Issues specific to Llamadeck deployment and operation.
    ```bash
    curl http://localhost:8080/api/v1/instances/{name}/logs
    # Or check log files directly
-   tail -f ~/.local/share/llamadeck/logs/{instance-name}.log
+   tail -f ~/.local/share/sfrp/logs/{instance-name}.log
    ```
 
 2. **Verify backend is installed:**  
@@ -75,7 +75,7 @@ Most model-specific issues (memory, GPU configuration, performance tuning) are b
 
 **Testing backends directly:**
 
-Testing your model and configuration directly with the backend helps determine if the issue is with llamadeck or the backend itself:
+Testing your model and configuration directly with the backend helps determine if the issue is with sfrp or the backend itself:
 
 ```bash
 # llama.cpp
@@ -167,14 +167,14 @@ vllm serve microsoft/DialoGPT-medium --port 8081
 curl http://localhost:8080/api/v1/instances/{name}/logs
 
 # Or check log files directly
-tail -f ~/.local/share/llamadeck/logs/{instance-name}.log
+tail -f ~/.local/share/sfrp/logs/{instance-name}.log
 ```
 
 ### Enable Debug Logging
 
 ```bash
-export LLAMADECK_LOG_LEVEL=debug
-llamadeck
+export SFRP_LOG_LEVEL=debug
+sfrp
 ```
 
 ## Getting Help
@@ -183,7 +183,7 @@ When reporting issues, include:
 
 1. **System information:**
    ```bash
-   llamadeck --version
+   sfrp --version
    ```
 
 2. **Configuration file** (remove sensitive keys)
