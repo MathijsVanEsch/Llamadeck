@@ -1,8 +1,8 @@
 package validation_test
 
 import (
-	"llamadeck/pkg/backends"
-	"llamadeck/pkg/validation"
+	"sfrp/pkg/backends"
+	"sfrp/pkg/validation"
 	"strings"
 	"testing"
 )

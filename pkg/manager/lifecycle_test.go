@@ -1,9 +1,9 @@
 package manager_test
 
 import (
-	"llamadeck/pkg/backends"
-	"llamadeck/pkg/instance"
-	"llamadeck/pkg/manager"
+	"sfrp/pkg/backends"
+	"sfrp/pkg/instance"
+	"sfrp/pkg/manager"
 	"sync"
 	"testing"
 	"time"

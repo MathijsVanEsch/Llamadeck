@@ -3,9 +3,9 @@ package instance
 import (
 	"encoding/json"
 	"fmt"
-	"llamadeck/pkg/backends"
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/validation"
+	"sfrp/pkg/backends"
+	"sfrp/pkg/config"
+	"sfrp/pkg/validation"
 	"log"
 	"maps"
 	"slices"

@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"llamadeck/pkg/backends"
-	"llamadeck/pkg/config"
+	"sfrp/pkg/backends"
+	"sfrp/pkg/config"
 )
 
 // Instance represents a running instance of llama server

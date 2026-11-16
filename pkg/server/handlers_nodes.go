@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"llamadeck/pkg/config"
+	"sfrp/pkg/config"
 )
 
 // NodeResponse represents a node configuration in API responses

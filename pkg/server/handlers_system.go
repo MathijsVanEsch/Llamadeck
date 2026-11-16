@@ -6,8 +6,8 @@ import (
 )
 
 // VersionHandler godoc
-// @Summary Get llamadeck version
-// @Description Returns the version of the llamadeck command
+// @Summary Get sfrp version
+// @Description Returns the version of the sfrp command
 // @Tags System
 // @Security ApiKeyAuth
 // @Produces text/plain

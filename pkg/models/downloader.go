@@ -268,7 +268,7 @@ func escapeHFPath(p string) string {
 }
 
 func (md *Downloader) setCommonHeaders(req *http.Request) {
-	req.Header.Set("User-Agent", "llama-cpp/llamadeck/"+md.version)
+	req.Header.Set("User-Agent", "llama-cpp/sfrp/"+md.version)
 	req.Header.Set("Accept", "application/json")
 	if token := md.getHFToken(); token != "" {
 		req.Header.Set("Authorization", "Bearer "+token)
@@ -343,7 +343,7 @@ func (md *Downloader) downloadWithResume(ctx context.Context, jobID string, task
 		if err != nil {
 			return fmt.Errorf("failed to create request: %w", err)
 		}
-		req.Header.Set("User-Agent", "llama-cpp/llamadeck/"+md.version)
+		req.Header.Set("User-Agent", "llama-cpp/sfrp/"+md.version)
 		if token := md.getHFToken(); token != "" {
 			req.Header.Set("Authorization", "Bearer "+token)
 		}

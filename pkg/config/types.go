@@ -31,7 +31,7 @@ type BackendConfig struct {
 	Custom   map[string]BackendSettings `yaml:"custom,omitempty" json:"custom,omitempty"`
 }
 
-// AppConfig represents the configuration for llamadeck
+// AppConfig represents the configuration for sfrp
 type AppConfig struct {
 	Server    ServerConfig          `yaml:"server" json:"server"`
 	Backends  BackendConfig         `yaml:"backends" json:"backends"`
@@ -41,7 +41,7 @@ type AppConfig struct {
 	LocalNode string                `yaml:"local_node,omitempty" json:"local_node,omitempty"`
 	Nodes     map[string]NodeConfig `yaml:"nodes,omitempty" json:"nodes,omitempty"`
 
-	// Directory where all llamadeck data will be stored (database, instances, logs, etc.)
+	// Directory where all sfrp data will be stored (database, instances, logs, etc.)
 	DataDir string `yaml:"data_dir" json:"data_dir"`
 
 	Version    string `yaml:"-" json:"version"`
@@ -158,7 +158,7 @@ type AuthConfig struct {
 // IssuerURL and ClientID are both set; all other fields have usable defaults.
 type OIDCConfig struct {
 
-	// Issuer URL of the IdP, e.g. https://authentik.example/application/o/llamadeck/
+	// Issuer URL of the IdP, e.g. https://authentik.example/application/o/sfrp/
 	IssuerURL string `yaml:"issuer_url" json:"issuer_url"`
 
 	// OAuth2 client ID registered with the IdP

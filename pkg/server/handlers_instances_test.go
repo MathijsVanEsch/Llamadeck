@@ -10,10 +10,10 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/database"
-	"llamadeck/pkg/manager"
-	"llamadeck/pkg/server"
+	"sfrp/pkg/config"
+	"sfrp/pkg/database"
+	"sfrp/pkg/manager"
+	"sfrp/pkg/server"
 )
 
 // newInstancesTestRouter wires the instance endpoints to a real manager over
