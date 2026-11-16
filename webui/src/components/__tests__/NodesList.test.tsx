@@ -62,7 +62,7 @@ describe('NodesList', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     window.sessionStorage.setItem(
-      'llamadeck_management_key',
+      'sfrp_management_key',
       'test-api-key-123',
     );
     global.fetch = vi.fn(() =>

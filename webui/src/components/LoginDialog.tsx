@@ -97,7 +97,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({
           <DialogDescription>
             {oidcEnabled
               ? 'Sign in with your identity provider, or use a management API key.'
-              : 'Please enter your management API key to access the Llamadeck dashboard.'}
+              : 'Please enter your management API key to access the SFRP dashboard.'}
           </DialogDescription>
         </DialogHeader>
 

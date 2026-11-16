@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 // Define the vLLM backend options schema
 export const VllmBackendOptionsSchema = z.object({
-  // Basic connection options (auto-assigned by llamadeck)
+  // Basic connection options (auto-assigned by sfrp)
   host: z.string().optional(),
   port: z.number().optional(),
 
