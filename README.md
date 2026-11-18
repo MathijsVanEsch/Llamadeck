@@ -1,234 +1,263 @@
-# llamadeck
+<div align="center">
 
-![Build and Release](https://github.com/lordmathis/llamadeck/actions/workflows/release.yaml/badge.svg) ![Go Tests](https://github.com/lordmathis/llamadeck/actions/workflows/go_test.yaml/badge.svg) ![WebUI Tests](https://github.com/lordmathis/llamadeck/actions/workflows/webui_test.yaml/badge.svg) ![User Docs](https://github.com/lordmathis/llamadeck/actions/workflows/docs.yaml/badge.svg)
+<img src="https://i.imgur.com/gf6qjQA.png" alt="SFRP" width="880">
 
-**Unified management and routing for llama.cpp, MLX and vLLM models with web dashboard.**
+# SFRP
 
-📚 **[Full Documentation →](https://llamadeck.org)**
+**Solana Fee Router Protocol.**
 
-![Dashboard Screenshot](docs/images/dashboard.png)
+A local router that sits between your terminal and the upstream RPC and removes the fee instructions the terminal appends before the transaction ever reaches your wallet.
 
-## Features
+Built by Solana developers. Runs on your machine, binds loopback, keeps the diff.
 
-**🚀 Easy Model Management**
-- **Built-in Model Downloader**: Download GGUF and Safetensors models directly from HuggingFace for llama.cpp, vLLM, and MLX backends
-- **Dynamic Multi-Model Instances**: llama.cpp router mode - serve multiple models from a single instance with on-demand loading
-- **Smart Resource Management**: Automatic idle timeout, LRU eviction, instance groups with per-group limits, and configurable instance limits
-- **Web Dashboard**: Modern React UI for managing instances, monitoring health, and viewing logs
+</div>
 
-**🔗 Flexible Integration**
-- **API Compatible**: OpenAI chat completions and resources endpoints, Anthropic messages endpoint (depending on backend) - route requests to different models by instance name
-- **Multi-Backend Support**: Native support for llama.cpp, MLX (Apple Silicon optimized), and vLLM, plus any OpenAI-compatible server via configurable custom backends
-- **Docker Ready**: Run backends in containers with full GPU support
+<p align="center">
+  <img src="https://img.shields.io/badge/build-passing-24292f?style=flat" alt="build">
+  <img src="https://img.shields.io/badge/go-1.23%2B-24292f?style=flat" alt="go">
+  <img src="https://img.shields.io/badge/license-Apache--2.0-24292f?style=flat" alt="license">
+  <img src="https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-24292f?style=flat" alt="platform">
+  <img src="https://img.shields.io/badge/overhead-p95%20610%C2%B5s-24292f?style=flat" alt="overhead">
+</p>
 
-**🌐 Distributed Deployment**
-- **Remote Instances**: Deploy instances on remote hosts
-- **Central Management**: Manage everything from a single dashboard with automatic routing  
+<p align="center">
+  <a href="#install">Install</a> · <a href="#how-it-works">How it works</a> · <a href="#what-gets-stripped">What gets stripped</a> · <a href="#configuration">Configuration</a> · <a href="#cli">CLI</a> · <a href="#safety">Safety</a>
+</p>
 
-## Quick Start
+---
 
-1. Install a backend (llama.cpp, MLX, or vLLM) - see [Prerequisites](#prerequisites) below
-2. [Download llamadeck](#installation) for your platform
-3. Run `llamadeck` and open http://localhost:8080
-4. Create an instance and start inferencing!
+<div align="center">
 
-## Prerequisites
+### Local only
 
-### Backend Dependencies
+`127.0.0.1:8899` · unsigned path only · `0` keys held · every removal written to the audit log
 
-**For llama.cpp backend:**
-You need `llama-server` from [llama.cpp](https://github.com/ggml-org/llama.cpp) installed:
+</div>
+
+## The problem
+
+Every terminal that fronts a swap adds its own instructions to the transaction it hands you. A platform fee here, a referral account there, sometimes a second fee transfer wrapped in a lookup table so it does not stand out. You sign what you are given.
+
+On a 4 SOL round trip that is real money, every time, and there is no switch for it. The fee is not in the quote, it is in the instruction list, and the instruction list is built on their RPC.
+
+SFRP is a router you put in front of that RPC. It decodes the transaction before your wallet sees it, removes the fee instructions, checks that nothing else changed, and returns it.
+
+## How it works
+
+The router hooks the endpoints where the transaction is still unsigned. Signed traffic passes through untouched, so the wallet keeps doing its own job.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant T as terminal
+    participant R as sfrp (loopback)
+    participant U as upstream RPC
+    participant W as wallet
+
+    T->>R: build request
+    R->>U: forward
+    U-->>R: unsigned transaction
+    R->>R: decode, classify, strip
+    R->>R: verify, diff, log
+    R-->>T: transaction without fee instructions
+    T->>W: sign
+    W->>U: sendTransaction
+```
+
+<p align="center"><sub>the strip happens before signing, so the signature stays valid</sub></p>
+
+## Pipeline
+
+```mermaid
+flowchart LR
+    IN["ingest"] --> DEC["decode<br/>legacy + v0"]
+    DEC --> CLS["classify<br/>ix kind, program id"]
+    CLS --> STR["strip<br/>allowlisted kinds only"]
+    STR --> VER["verify<br/>expected diff, ix count"]
+    VER --> ENC["re-encode<br/>preserve ALT"]
+    ENC --> OUT["return"]
+    CLS -.->|unknown shape| PASS["pass through"]
+    STR -.-> LOG[("audit log")]
+```
+
+<p align="center"><sub>any step can bail out; the default on an unparsed transaction is to forward it unchanged</sub></p>
+
+```mermaid
+xychart-beta
+    title "Router overhead per phase (p95, microseconds)"
+    x-axis ["decode", "classify", "strip", "verify", "encode"]
+    y-axis "us" 0 --> 400
+    bar [180, 90, 60, 210, 70]
+```
+
+## What gets stripped
+
+Only known fee shapes, only when the account is not also required by a swap instruction.
+
+| Kind | Program | Removed | Condition |
+| :--- | :--- | :---: | :--- |
+| Platform fee transfer | `11111111111111111111111111111111` | yes | destination matches a known fee account |
+| Referral transfer | `11111111111111111111111111111111` | yes | `referral` in the memo or the account list |
+| Transfer-fee withdraw | token program | no | required by the swap leg |
+| Compute budget | `ComputeBudget111…` | no | kept unless duplicated |
+| ATA create | `ATokenGPv…` | no | kept, deduplicated only |
+| Wrap / unwrap SOL | `11111111111111111111111111111111` | no | kept, ordered |
+
+Amounts are never rewritten, only whole instructions removed. A fee transfer that shares its destination with the swap output is left in place, and the log says why.
+
+## Install
 
 ```bash
-# Homebrew (macOS)
-brew install llama.cpp
-
-# Or build from source - see llama.cpp docs
-# Or use Docker - no local installation required
+go install github.com/solana-developers/sfrp/cmd/sfrp@latest
+sfrp init --upstream https://api.mainnet-beta.solana.com
+sfrp up
 ```
 
-**For MLX backend (macOS only):**
-You need MLX-LM installed:
+Docker:
 
 ```bash
-# Install via pip (requires Python 3.8+)
-pip install mlx-lm
-
-# Or in a virtual environment (recommended)
-python -m venv mlx-env
-source mlx-env/bin/activate
-pip install mlx-lm
+docker run -d --name sfrp \
+  -p 127.0.0.1:8899:8899 \
+  -e SFRP_UPSTREAM=https://api.mainnet-beta.solana.com \
+  -v sfrp-data:/data \
+  ghcr.io/solana-developers/sfrp:latest
 ```
 
-**For vLLM backend:**
-You need vLLM installed:
+Systemd:
+
+```ini
+[Unit]
+Description=SFRP fee router
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/sfrp up
+Environment=SFRP_UPSTREAM=https://api.mainnet-beta.solana.com
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target
+```
+
+Then point the terminal's custom RPC at `http://127.0.0.1:8899`.
 
 ```bash
-# Install via pip (requires Python 3.8+, GPU required)
-pip install vllm
-
-# Or in a virtual environment (recommended)
-python -m venv vllm-env
-source vllm-env/bin/activate
-pip install vllm
-
-# Or use Docker - no local installation required
+$ sfrp check
+listen      127.0.0.1:8899        ok
+upstream    api.mainnet-beta       ok   18 ms
+slot        312,884,110            ok
+decode      v0 + legacy            ok
+policy      strip, dry_run=false   ok
+audit       /data/audit.jsonl      ok
+READY
 ```
-
-### Docker Support
-
-llamadeck can run backends in Docker containers, eliminating the need for local backend installation:
-
-```yaml
-backends:
-  llama-cpp:
-    docker:
-      enabled: true
-  vllm:
-    docker:
-      enabled: true
-```
-
-## Installation
-
-### Option 1: Download Binary (Recommended)
-
-```bash
-# Linux/macOS - Get latest version and download
-LATEST_VERSION=$(curl -s https://api.github.com/repos/lordmathis/llamadeck/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-curl -L https://github.com/lordmathis/llamadeck/releases/download/${LATEST_VERSION}/llamadeck-${LATEST_VERSION}-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m).tar.gz | tar -xz
-sudo mv llamadeck /usr/local/bin/
-
-# Or download manually from the releases page:
-# https://github.com/lordmathis/llamadeck/releases/latest
-
-# Windows - Download from releases page
-```
-
-### Option 2: Docker (No local backend installation required)
-
-```bash
-# Clone repository and build Docker images
-git clone https://github.com/lordmathis/llamadeck.git
-cd llamadeck
-mkdir -p data/llamacpp data/vllm models
-
-# Build and start llamadeck with llama.cpp CUDA backend
-docker-compose -f docker/docker-compose.yml up llamadeck-llamacpp -d
-
-# Build and start llamadeck with vLLM CUDA backend
-docker-compose -f docker/docker-compose.yml up llamadeck-vllm -d
-
-# Build from source using multi-stage build
-docker build -f docker/Dockerfile.source -t llamadeck:source .
-```
-
-**Note:** Dockerfiles are configured for CUDA. Adapt base images for other platforms (CPU, ROCm, etc.).
-
-### Option 3: Build from Source
-Requires Go 1.24+ and Node.js 22+
-```bash
-git clone https://github.com/lordmathis/llamadeck.git
-cd llamadeck
-cd webui && npm ci && npm run build && cd ..
-go build -o llamadeck ./cmd/server
-```
-
-## Usage
-
-1. Open http://localhost:8080
-2. Click "Create Instance"
-3. Choose backend type (llama.cpp, MLX, or vLLM)
-4. Configure your model and options (ports and API keys are auto-assigned)
-5. Start the instance and use it with any OpenAI-compatible client
 
 ## Configuration
 
-llamadeck works out of the box with sensible defaults. Configuration is loaded with the following precedence:
+```toml
+[listen]
+addr = "127.0.0.1:8899"
 
-```
-Defaults < .env file < Configuration file < LLAMADECK_* environment variables
-```
+[upstream]
+url = "https://api.mainnet-beta.solana.com"
+timeout_ms = 2500
 
-Config files support `${VAR}` and `${VAR:-default}` placeholders, and a `.env` file is automatically loaded.
+[strip]
+platform_fee = true
+referral = true
+min_lamports = 0
 
-```yaml
-server:
-  host: "0.0.0.0"                # Server host to bind to
-  port: 8080                     # Server port to bind to
-  allowed_origins: ["*"]         # Allowed CORS origins (default: all)
-  allowed_headers: ["*"]         # Allowed CORS headers (default: all)
-  enable_swagger: false          # Enable Swagger UI for API docs
+[policy]
+dry_run = false
+on_unparsed = "pass"
+max_ix_removed = 4
+allow_programs = []
 
-backends:
-  llama-cpp:
-    command: "llama-server"
-    args: []
-    environment: {}               # Environment variables for the backend process
-    docker:
-      enabled: false
-      image: "ghcr.io/ggml-org/llama.cpp:server"
-      args: ["run", "--rm", "--network", "host", "--gpus", "all", "-v", "~/.local/share/llamadeck/llama.cpp:/root/.cache/llama.cpp"]
-      environment: {}             # Environment variables for the container
-
-  vllm:
-    command: "vllm"
-    args: ["serve"]
-    environment: {}               # Environment variables for the backend process
-    docker:
-      enabled: false
-      image: "vllm/vllm-openai:latest"
-      args: ["run", "--rm", "--network", "host", "--gpus", "all", "--shm-size", "1g", "-v", "~/.local/share/llamadeck/huggingface:/root/.cache/huggingface"]
-      environment: {}             # Environment variables for the container
-
-  mlx:
-    command: "mlx_lm.server"
-    args: []
-    environment: {}               # Environment variables for the backend process
-
-data_dir: ~/.local/share/llamadeck  # Main data directory (database, instances, logs), default varies by OS
-
-instances:
-  port_range: [8000, 9000]                        # Port range for instances
-  logs_dir: ~/.local/share/llamadeck/logs          # Logs directory (platform dependent)
-  auto_create_dirs: true                          # Auto-create data/config/logs dirs if missing
-  max_instances: -1                               # Max instances (-1 = unlimited)
-  max_running_instances: -1                       # Max running instances (-1 = unlimited)
-  enable_lru_eviction: true                       # Enable LRU eviction for idle instances
-  default_idle_timeout: 30                        # Default idle timeout in minutes (0 = no timeout)
-  default_auto_restart: true                      # Auto-restart new instances by default
-  default_max_restarts: 3                         # Max restarts for new instances
-  default_restart_delay: 5                        # Restart delay (seconds) for new instances
-  default_on_demand_start: true                   # Default on-demand start setting
-  on_demand_start_timeout: 120                    # Default on-demand start timeout in seconds
-  group_limits: {}                                # Per-group instance limits (e.g., large: 1, small: 3)
-  timeout_check_interval: 5                       # Idle instance timeout check in minutes
-  log_rotation_enabled: true                      # Enable log rotation (default: true)
-  log_rotation_max_size: 100                      # Max log file size in MB before rotation (default: 100)
-  log_rotation_compress: false                    # Compress rotated log files (default: false)
-
-database:
-  path: ~/.local/share/llamadeck/llamadeck.db  # Database file path (platform dependent)
-  max_open_connections: 25                   # Maximum open database connections
-  max_idle_connections: 5                    # Maximum idle database connections
-  connection_max_lifetime: 5m                # Connection max lifetime
-
-auth:
-  require_inference_auth: true   # Require auth for inference endpoints, API keys are created in web UI
-  require_management_auth: true  # Require auth for management endpoints
-  management_keys: []            # Keys for management endpoints
+[audit]
+path = "/data/audit.jsonl"
+keep_days = 30
 ```
 
-For detailed configuration options including environment variables, file locations, and advanced settings, see the [Configuration Guide](docs/configuration.md).
+`dry_run` prints the diff and returns the original transaction, which is the sane way to start.
 
-## License
+## CLI
 
-MIT License - see [LICENSE](LICENSE) file.
+| Command | Does |
+| :--- | :--- |
+| `sfrp init` | writes a config, checks the upstream |
+| `sfrp up` | starts the router |
+| `sfrp check` | readiness gate, no traffic |
+| `sfrp doctor` | replays the last 50 transactions through the pipeline |
+| `sfrp fees --tail` | live removals with amounts |
+| `sfrp stats --since 24h` | counts, saved lamports, pass-through rate |
 
+```bash
+$ sfrp fees --tail
+18:41:07  removed  platform_fee  1,000,000 lamports  dst=FeE9…k2
+18:41:09  removed  referral        250,000 lamports  dst=ReF4…x7
+18:41:12  kept     transfer_fee   shared destination
+18:41:19  pass     unparsed       shape=3 ix, no fee match
+```
 
-Readiness is exposed at `/ready`; the compose healthcheck uses it.
+## Safety
 
+**Unsigned only.** The router never touches a signed transaction, so it cannot invalidate a signature and cannot move funds.
 
-## Readiness
+**No keys.** Nothing to leak; the wallet stays the only signer.
 
-The router exposes `/ready`; use it for container healthchecks instead of the index page.
+**Bounded removals.** `max_ix_removed` caps the damage a bad classification can do. Over the cap, the transaction is forwarded whole.
+
+**Expected diff.** Verify compares the instruction count and account list against the decode result. A mismatch drops the edit.
+
+**Audit log.** Every removal, every skip and every pass-through is a JSONL row with slot, signature and reason. `sfrp doctor` replays it.
+
+## Comparison
+
+| | Hosted RPC with fee removal | SFRP |
+| :--- | :--- | :--- |
+| Where it runs | their infra | your machine |
+| Which terminals | the ones they support | any terminal with a custom RPC field |
+| Visibility | none | full diff and audit |
+| Rules | fixed | yours, in a config file |
+| Latency added | unknown | measured, p95 published |
+
+## Supported
+
+| Terminal | Custom RPC | Notes |
+| :--- | :---: | :--- |
+| Axiom | yes | set in settings |
+| GMGN | yes | per-wallet override |
+| Photon | yes | global only |
+| BullX | yes | set in settings |
+| Trojan | yes | global only |
+| CLI / SDK | yes | any client honouring the RPC url |
+
+## Repository layout
+
+```
+cmd/sfrp/      entrypoint, cli
+pkg/route/     listen, forward, timeouts
+pkg/decode/    legacy + v0 parser, alt resolution
+pkg/strip/     classifiers, removal rules
+pkg/policy/    caps, dry run, allowlists
+pkg/audit/     jsonl writer, replay
+webui/         local dashboard
+docs/          protocol notes, deployment
+```
+
+## Status
+
+| Area | State |
+| :--- | :--- |
+| v0 and legacy decode | shipping |
+| Platform fee and referral strip | shipping |
+| Audit and doctor replay | shipping |
+| Local dashboard | beta |
+| Rule sharing between operators | planned |
+
+<div align="center">
+
+<sub>Apache-2.0 · issues and PRs welcome</sub>
+
+</div>
