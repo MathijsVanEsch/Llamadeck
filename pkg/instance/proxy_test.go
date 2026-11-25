@@ -1,8 +1,8 @@
 package instance
 
 import (
-	"llamadeck/pkg/backends"
-	"llamadeck/pkg/config"
+	"sfrp/pkg/backends"
+	"sfrp/pkg/config"
 	"net/http"
 	"net/http/httptest"
 	"net/url"

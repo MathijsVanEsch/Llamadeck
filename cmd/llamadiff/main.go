@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"llamadeck/pkg/backends"
+	"sfrp/pkg/backends"
 	"os/exec"
 	"reflect"
 	"regexp"
@@ -70,7 +70,7 @@ func main() {
 	conflicts := findConflicts(fieldToFlags)
 
 	// Report results
-	fmt.Println("=== FLAGS MISSING FROM llamadeck ===")
+	fmt.Println("=== FLAGS MISSING FROM sfrp ===")
 	if len(missing) == 0 {
 		fmt.Println("(none)")
 	} else {

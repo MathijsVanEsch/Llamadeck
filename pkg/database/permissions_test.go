@@ -2,7 +2,7 @@ package database
 
 import (
 	"context"
-	"llamadeck/pkg/auth"
+	"sfrp/pkg/auth"
 	"testing"
 	"time"
 )

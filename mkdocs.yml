@@ -1,10 +1,10 @@
-site_name: Llamadeck Documentation
-site_description: User documentation for Llamadeck - A management tool for Llama.cpp instances
-site_author: Llamadeck Team
-site_url: https://llamadeck.org
+site_name: SFRP Documentation
+site_description: User documentation for SFRP - A management tool for Llama.cpp instances
+site_author: SFRP Team
+site_url: https://sfrp.org
 
-repo_name: lordmathis/llamadeck
-repo_url: https://github.com/lordmathis/llamadeck
+repo_name: lordmathis/sfrp
+repo_url: https://github.com/lordmathis/sfrp
 
 theme:
   name: material
@@ -80,7 +80,7 @@ extra:
     default: stable
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/lordmathis/llamadeck
+      link: https://github.com/lordmathis/sfrp
 
 extra_css:
 - css/css-v1.1.3.css

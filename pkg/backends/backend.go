@@ -3,8 +3,8 @@ package backends
 import (
 	"encoding/json"
 	"fmt"
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/validation"
+	"sfrp/pkg/config"
+	"sfrp/pkg/validation"
 	"maps"
 	"strings"
 )

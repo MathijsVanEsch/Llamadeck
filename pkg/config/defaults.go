@@ -79,7 +79,7 @@ func getDefaultConfig(dataDir string) AppConfig {
 			LogRotationCompress:  false,
 		},
 		Database: DatabaseConfig{
-			Path:               "", // Will be set to data_dir/llamadeck.db if empty
+			Path:               "", // Will be set to data_dir/sfrp.db if empty
 			MaxOpenConnections: 25,
 			MaxIdleConnections: 5,
 			ConnMaxLifetime:    5 * time.Minute,
@@ -123,26 +123,26 @@ func getDefaultDataDir() string {
 	case "windows":
 		// Try PROGRAMDATA first (system-wide), fallback to LOCALAPPDATA (user)
 		if programData := os.Getenv("PROGRAMDATA"); programData != "" {
-			return filepath.Join(programData, "llamadeck")
+			return filepath.Join(programData, "sfrp")
 		}
 		if localAppData := os.Getenv("LOCALAPPDATA"); localAppData != "" {
-			return filepath.Join(localAppData, "llamadeck")
+			return filepath.Join(localAppData, "sfrp")
 		}
-		return "C:\\ProgramData\\llamadeck" // Final fallback
+		return "C:\\ProgramData\\sfrp" // Final fallback
 
 	case "darwin":
 		// For macOS, use user's Application Support directory
 		if homeDir, _ := os.UserHomeDir(); homeDir != "" {
-			return filepath.Join(homeDir, "Library", "Application Support", "llamadeck")
+			return filepath.Join(homeDir, "Library", "Application Support", "sfrp")
 		}
-		return "/usr/local/var/llamadeck" // Fallback
+		return "/usr/local/var/sfrp" // Fallback
 
 	default:
 		// Linux and other Unix-like systems
 		if homeDir, _ := os.UserHomeDir(); homeDir != "" {
-			return filepath.Join(homeDir, ".local", "share", "llamadeck")
+			return filepath.Join(homeDir, ".local", "share", "sfrp")
 		}
-		return "/var/lib/llamadeck" // Final fallback
+		return "/var/lib/sfrp" // Final fallback
 	}
 }
 
@@ -153,34 +153,34 @@ func getPlatformConfigDirs() []string {
 	case "windows":
 		var dirs []string
 		if appData := os.Getenv("APPDATA"); appData != "" {
-			dirs = append(dirs, filepath.Join(appData, "llamadeck"))
+			dirs = append(dirs, filepath.Join(appData, "sfrp"))
 		} else if homeDir != "" {
-			dirs = append(dirs, filepath.Join(homeDir, "llamadeck"))
+			dirs = append(dirs, filepath.Join(homeDir, "sfrp"))
 		}
 		if programData := os.Getenv("PROGRAMDATA"); programData != "" {
-			dirs = append(dirs, filepath.Join(programData, "llamadeck"))
+			dirs = append(dirs, filepath.Join(programData, "sfrp"))
 		}
 		return dirs
 	case "darwin":
 		var dirs []string
 		if homeDir != "" {
-			dirs = append(dirs, filepath.Join(homeDir, "Library", "Application Support", "llamadeck"))
+			dirs = append(dirs, filepath.Join(homeDir, "Library", "Application Support", "sfrp"))
 		}
-		dirs = append(dirs, "/Library/Application Support/llamadeck")
+		dirs = append(dirs, "/Library/Application Support/sfrp")
 		return dirs
 	default:
 		var dirs []string
 		if homeDir != "" {
-			dirs = append(dirs, filepath.Join(homeDir, ".config", "llamadeck"))
+			dirs = append(dirs, filepath.Join(homeDir, ".config", "sfrp"))
 		}
-		dirs = append(dirs, "/etc/llamadeck")
+		dirs = append(dirs, "/etc/sfrp")
 		return dirs
 	}
 }
 
 func getDefaultConfigLocations() []string {
 	var locations []string
-	locations = append(locations, "llamadeck.yaml")
+	locations = append(locations, "sfrp.yaml")
 	locations = append(locations, "config.yaml")
 
 	for _, dir := range getPlatformConfigDirs() {

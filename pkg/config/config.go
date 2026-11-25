@@ -14,7 +14,7 @@ import (
 // 1. Hardcoded defaults
 // 2. .env file
 // 3. Config file (with env var expansion)
-// 4. LLAMADECK_* environment variable overrides
+// 4. SFRP_* environment variable overrides
 func LoadConfig(configPath string) (AppConfig, error) {
 	// 1. Start with defaults
 	defaultDataDir := getDefaultDataDir()
@@ -56,7 +56,7 @@ func LoadConfig(configPath string) (AppConfig, error) {
 		cfg.Instances.InstancesDir = filepath.Join(cfg.DataDir, "instances")
 	}
 	if cfg.Database.Path == "" {
-		cfg.Database.Path = filepath.Join(cfg.DataDir, "llamadeck.db")
+		cfg.Database.Path = filepath.Join(cfg.DataDir, "sfrp.db")
 	}
 
 	// Validate port range

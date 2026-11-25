@@ -2,7 +2,7 @@ package backends
 
 import (
 	"fmt"
-	"llamadeck/pkg/validation"
+	"sfrp/pkg/validation"
 	"strconv"
 	"strings"
 )

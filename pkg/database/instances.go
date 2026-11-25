@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"llamadeck/pkg/instance"
+	"sfrp/pkg/instance"
 	"log"
 	"time"
 )

@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/database"
-	"llamadeck/pkg/instance"
-	"llamadeck/pkg/manager"
-	"llamadeck/pkg/models"
-	"llamadeck/pkg/validation"
+	"sfrp/pkg/config"
+	"sfrp/pkg/database"
+	"sfrp/pkg/instance"
+	"sfrp/pkg/manager"
+	"sfrp/pkg/models"
+	"sfrp/pkg/validation"
 	"log"
 	"net/http"
 	"sync"
@@ -62,7 +62,7 @@ func writeText(w http.ResponseWriter, status int, data string) {
 	}
 }
 
-// Handler provides HTTP handlers for the llamadeck server API
+// Handler provides HTTP handlers for the sfrp server API
 type Handler struct {
 	InstanceManager manager.InstanceManager
 	modelManager    *models.Manager

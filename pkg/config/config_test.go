@@ -1,7 +1,7 @@
 package config_test
 
 import (
-	"llamadeck/pkg/config"
+	"sfrp/pkg/config"
 	"os"
 	"path/filepath"
 	"testing"
@@ -41,8 +41,8 @@ func TestLoadConfig_Defaults(t *testing.T) {
 		t.Fatalf("Failed to get user home directory: %v", err)
 	}
 
-	if cfg.Instances.LogsDir != filepath.Join(homedir, ".local", "share", "llamadeck", "logs") {
-		t.Errorf("Expected default logs directory '%s', got %q", filepath.Join(homedir, ".local", "share", "llamadeck", "logs"), cfg.Instances.LogsDir)
+	if cfg.Instances.LogsDir != filepath.Join(homedir, ".local", "share", "sfrp", "logs") {
+		t.Errorf("Expected default logs directory '%s', got %q", filepath.Join(homedir, ".local", "share", "sfrp", "logs"), cfg.Instances.LogsDir)
 	}
 	if !cfg.Instances.AutoCreateDirs {
 		t.Error("Expected default instances auto-create to be true")
@@ -186,15 +186,15 @@ backends:
 func TestLoadConfig_EnvironmentOverrides(t *testing.T) {
 	// Set environment variables
 	envVars := map[string]string{
-		"LLAMADECK_HOST":                  "0.0.0.0",
-		"LLAMADECK_PORT":                  "3000",
-		"LLAMADECK_INSTANCE_PORT_RANGE":   "5000-6000",
-		"LLAMADECK_LOGS_DIR":              "/env/logs",
-		"LLAMADECK_MAX_INSTANCES":         "20",
-		"LLAMADECK_DEFAULT_IDLE_TIMEOUT":  "60",
-		"LLAMADECK_DEFAULT_AUTO_RESTART":  "false",
-		"LLAMADECK_DEFAULT_MAX_RESTARTS":  "7",
-		"LLAMADECK_DEFAULT_RESTART_DELAY": "15",
+		"SFRP_HOST":                  "0.0.0.0",
+		"SFRP_PORT":                  "3000",
+		"SFRP_INSTANCE_PORT_RANGE":   "5000-6000",
+		"SFRP_LOGS_DIR":              "/env/logs",
+		"SFRP_MAX_INSTANCES":         "20",
+		"SFRP_DEFAULT_IDLE_TIMEOUT":  "60",
+		"SFRP_DEFAULT_AUTO_RESTART":  "false",
+		"SFRP_DEFAULT_MAX_RESTARTS":  "7",
+		"SFRP_DEFAULT_RESTART_DELAY": "15",
 	}
 
 	// Set env vars and ensure cleanup
@@ -260,10 +260,10 @@ instances:
 	}
 
 	// Set some environment variables (should override file)
-	os.Setenv("LLAMADECK_HOST", "env-host")
-	os.Setenv("LLAMADECK_MAX_INSTANCES", "15")
-	defer os.Unsetenv("LLAMADECK_HOST")
-	defer os.Unsetenv("LLAMADECK_MAX_INSTANCES")
+	os.Setenv("SFRP_HOST", "env-host")
+	os.Setenv("SFRP_MAX_INSTANCES", "15")
+	defer os.Unsetenv("SFRP_HOST")
+	defer os.Unsetenv("SFRP_MAX_INSTANCES")
 
 	cfg, err := config.LoadConfig(configFile)
 	if err != nil {
@@ -291,8 +291,8 @@ func TestLoadConfig_OIDCGroupGate(t *testing.T) {
 auth:
   oidc:
     issuer_url: "https://auth.example.com"
-    client_id: "llamadeck"
-    allowed_groups: ["llamadeck-users", "admins"]
+    client_id: "sfrp"
+    allowed_groups: ["sfrp-users", "admins"]
     groups_claim: "roles"
 `
 	if err := os.WriteFile(configFile, []byte(configContent), 0644); err != nil {
@@ -303,15 +303,15 @@ auth:
 	if err != nil {
 		t.Fatalf("LoadConfig failed: %v", err)
 	}
-	if got := cfg.Auth.OIDC.AllowedGroups; len(got) != 2 || got[0] != "llamadeck-users" || got[1] != "admins" {
-		t.Errorf("allowed_groups = %v, expected [llamadeck-users admins]", got)
+	if got := cfg.Auth.OIDC.AllowedGroups; len(got) != 2 || got[0] != "sfrp-users" || got[1] != "admins" {
+		t.Errorf("allowed_groups = %v, expected [sfrp-users admins]", got)
 	}
 	if cfg.Auth.OIDC.GroupsClaim != "roles" {
 		t.Errorf("groups_claim = %q, expected %q", cfg.Auth.OIDC.GroupsClaim, "roles")
 	}
 
-	os.Setenv("LLAMADECK_AUTH_OIDC_ALLOWED_GROUPS", "env-admins")
-	defer os.Unsetenv("LLAMADECK_AUTH_OIDC_ALLOWED_GROUPS")
+	os.Setenv("SFRP_AUTH_OIDC_ALLOWED_GROUPS", "env-admins")
+	defer os.Unsetenv("SFRP_AUTH_OIDC_ALLOWED_GROUPS")
 
 	cfg, err = config.LoadConfig(configFile)
 	if err != nil {
@@ -409,17 +409,17 @@ func TestGetBackendSettings_NewStructuredConfig(t *testing.T) {
 func TestLoadConfig_BackendEnvironmentVariables(t *testing.T) {
 	// Test that backend environment variables work correctly
 	envVars := map[string]string{
-		"LLAMADECK_LLAMACPP_COMMAND":        "env-llama",
-		"LLAMADECK_LLAMACPP_ARGS":           "--verbose --threads 4",
-		"LLAMADECK_LLAMACPP_DOCKER_ENABLED": "true",
-		"LLAMADECK_LLAMACPP_DOCKER_IMAGE":   "env-llama:latest",
-		"LLAMADECK_LLAMACPP_DOCKER_ARGS":    "run --rm --network host --gpus all",
-		"LLAMADECK_LLAMACPP_DOCKER_ENV":     "CUDA_VISIBLE_DEVICES=0,OMP_NUM_THREADS=4",
-		"LLAMADECK_VLLM_COMMAND":            "env-vllm",
-		"LLAMADECK_VLLM_DOCKER_ENABLED":     "false",
-		"LLAMADECK_VLLM_DOCKER_IMAGE":       "env-vllm:latest",
-		"LLAMADECK_VLLM_DOCKER_ENV":         "PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512,CUDA_VISIBLE_DEVICES=1",
-		"LLAMADECK_MLX_COMMAND":             "env-mlx",
+		"SFRP_LLAMACPP_COMMAND":        "env-llama",
+		"SFRP_LLAMACPP_ARGS":           "--verbose --threads 4",
+		"SFRP_LLAMACPP_DOCKER_ENABLED": "true",
+		"SFRP_LLAMACPP_DOCKER_IMAGE":   "env-llama:latest",
+		"SFRP_LLAMACPP_DOCKER_ARGS":    "run --rm --network host --gpus all",
+		"SFRP_LLAMACPP_DOCKER_ENV":     "CUDA_VISIBLE_DEVICES=0,OMP_NUM_THREADS=4",
+		"SFRP_VLLM_COMMAND":            "env-vllm",
+		"SFRP_VLLM_DOCKER_ENABLED":     "false",
+		"SFRP_VLLM_DOCKER_IMAGE":       "env-vllm:latest",
+		"SFRP_VLLM_DOCKER_ENV":         "PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512,CUDA_VISIBLE_DEVICES=1",
+		"SFRP_MLX_COMMAND":             "env-mlx",
 	}
 
 	// Set env vars and ensure cleanup
@@ -590,8 +590,8 @@ nodes:
 	})
 
 	t.Run("local node from environment variable", func(t *testing.T) {
-		os.Setenv("LLAMADECK_LOCAL_NODE", "custom-node")
-		defer os.Unsetenv("LLAMADECK_LOCAL_NODE")
+		os.Setenv("SFRP_LOCAL_NODE", "custom-node")
+		defer os.Unsetenv("SFRP_LOCAL_NODE")
 
 		cfg, err := config.LoadConfig("nonexistent-file.yaml")
 		if err != nil {

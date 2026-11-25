@@ -2,10 +2,10 @@ package instance_test
 
 import (
 	"encoding/json"
-	"llamadeck/pkg/backends"
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/instance"
-	"llamadeck/pkg/testutil"
+	"sfrp/pkg/backends"
+	"sfrp/pkg/config"
+	"sfrp/pkg/instance"
+	"sfrp/pkg/testutil"
 	"os"
 	"testing"
 	"time"

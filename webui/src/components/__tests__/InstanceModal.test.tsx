@@ -35,7 +35,7 @@ describe('InstanceModal - Form Logic and Validation', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    window.sessionStorage.setItem('llamadeck_management_key', 'test-api-key-123')
+    window.sessionStorage.setItem('sfrp_management_key', 'test-api-key-123')
     global.fetch = vi.fn(() => Promise.resolve(new Response(null, { status: 200 })))
   })
 

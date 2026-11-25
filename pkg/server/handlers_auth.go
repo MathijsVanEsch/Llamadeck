@@ -3,7 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"llamadeck/pkg/auth"
+	"sfrp/pkg/auth"
 	"net/http"
 	"strconv"
 	"time"
@@ -122,7 +122,7 @@ func (h *Handler) CreateKey() http.HandlerFunc {
 		}
 
 		// Generate plain-text key
-		plainTextKey, err := auth.GenerateKey("llamadeck")
+		plainTextKey, err := auth.GenerateKey("sfrp")
 		if err != nil {
 			writeError(w, http.StatusInternalServerError, "key_generation_failed", "Failed to generate API key")
 			return

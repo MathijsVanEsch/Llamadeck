@@ -3,9 +3,9 @@ package backends_test
 import (
 	"encoding/json"
 	"fmt"
-	"llamadeck/pkg/backends"
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/testutil"
+	"sfrp/pkg/backends"
+	"sfrp/pkg/config"
+	"sfrp/pkg/testutil"
 	"reflect"
 	"testing"
 )

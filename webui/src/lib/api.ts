@@ -18,7 +18,7 @@ async function apiCall<T>(
   const url = `${API_BASE}${endpoint}`;
 
   // Get auth token from sessionStorage (same as AuthContext)
-  const storedKey = sessionStorage.getItem('llamadeck_management_key');
+  const storedKey = sessionStorage.getItem('sfrp_management_key');
 
   // Prepare headers with auth
   const headers: Record<string, string> = {
@@ -40,7 +40,7 @@ async function apiCall<T>(
     // Signal auth loss so the app falls back to the login dialog instead of
     // stranding contexts with error banners
     if (response.status === 401) {
-      window.dispatchEvent(new CustomEvent('llamadeck:unauthorized'))
+      window.dispatchEvent(new CustomEvent('sfrp:unauthorized'))
     }
 
     // Handle errors using centralized error handler

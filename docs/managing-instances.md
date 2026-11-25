@@ -1,10 +1,10 @@
 # Managing Instances
 
-Learn how to effectively manage your llama.cpp, MLX, and vLLM instances with Llamadeck through both the Web UI and API.
+Learn how to effectively manage your llama.cpp, MLX, and vLLM instances with SFRP through both the Web UI and API.
 
 ## Overview
 
-Llamadeck provides two ways to manage instances:
+SFRP provides two ways to manage instances:
 
 - **Web UI**: Accessible at `http://localhost:8080` with an intuitive dashboard
 - **REST API**: Programmatic access for automation and integration
@@ -13,9 +13,9 @@ Llamadeck provides two ways to manage instances:
 
 ### Authentication
 
-Llamadeck uses a **Management API Key** to authenticate requests to the management API (creating, starting, stopping instances). All curl examples below use `<token>` as a placeholder - replace this with your actual Management API Key.
+SFRP uses a **Management API Key** to authenticate requests to the management API (creating, starting, stopping instances). All curl examples below use `<token>` as a placeholder - replace this with your actual Management API Key.
 
-By default, authentication is required. If you don't configure a management API key in your configuration file, llamadeck will auto-generate one and print it to the terminal on startup. See the [Configuration](configuration.md) guide for details.
+By default, authentication is required. If you don't configure a management API key in your configuration file, sfrp will auto-generate one and print it to the terminal on startup. See the [Configuration](configuration.md) guide for details.
 
 For Web UI access:
 1. Navigate to the web UI
@@ -78,7 +78,7 @@ Configure backend and execution options:
     - **vLLM**: Model identifier, tensor parallel size, GPU memory utilization, etc.
 
 !!! tip "Auto-Assignment"
-    Llamadeck automatically assigns ports from the configured port range (default: 8000-9000) and generates API keys if authentication is enabled. You typically don't need to manually specify these values.
+    SFRP automatically assigns ports from the configured port range (default: 8000-9000) and generates API keys if authentication is enabled. You typically don't need to manually specify these values.
 
 ### Advanced Tab
 
@@ -95,7 +95,7 @@ Custom backend instances reference a `backends.custom.<name>` entry from the [co
 - `name` (required): the config entry to use.
 - `args`: instance-level arguments, appended after the entry's configured `args`.
 - `model`: model identifier reported to OpenAI-compatible clients.
-- `host` / `port`: where llamadeck reaches the server (proxy and health checks). Leave `port` empty for automatic allocation.
+- `host` / `port`: where sfrp reaches the server (proxy and health checks). Leave `port` empty for automatic allocation.
 
 The `{port}` and `{model}` placeholders are substituted at start; see [Custom Backends](custom-backends.md) for how they work.
 
@@ -413,7 +413,7 @@ With `group_limits: {large: 1, small: 3}` and `max_running_instances: 4`:
 
 ## Instance Proxy
 
-Llamadeck proxies all requests to the underlying backend instances (llama-server, MLX, or vLLM).
+SFRP proxies all requests to the underlying backend instances (llama-server, MLX, or vLLM).
 
 ```bash
 # Proxy requests to the instance

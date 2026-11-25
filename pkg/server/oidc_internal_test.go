@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"llamadeck/pkg/auth"
-	"llamadeck/pkg/config"
+	"sfrp/pkg/auth"
+	"sfrp/pkg/config"
 )
 
 func TestSignVerifyStateValue(t *testing.T) {
@@ -97,7 +97,7 @@ func TestGroupsFromClaims(t *testing.T) {
 }
 
 func TestAuthorizedForGroups(t *testing.T) {
-	allow := []string{"llamadeck-users", "admins"}
+	allow := []string{"sfrp-users", "admins"}
 
 	if !authorizedForGroups(nil, nil) {
 		t.Error("empty allowlist must admit everyone (gate disabled)")
@@ -272,7 +272,7 @@ func TestOIDCLoginBindsStateCookieToRedirect(t *testing.T) {
 func TestOIDCLoginStateCookiePathUnderSubpath(t *testing.T) {
 	s := &OIDCService{
 		stateKey: []byte("test-key"),
-		cfg:      config.OIDCConfig{RedirectURL: "https://dash.example.com/llamadeck" + callbackPath},
+		cfg:      config.OIDCConfig{RedirectURL: "https://dash.example.com/sfrp" + callbackPath},
 	}
 	handler := &Handler{oidc: s}
 
@@ -282,7 +282,7 @@ func TestOIDCLoginStateCookiePathUnderSubpath(t *testing.T) {
 
 	for _, c := range recorder.Result().Cookies() {
 		if c.Name == stateCookieName {
-			if want := "/llamadeck" + callbackPath; c.Path != want {
+			if want := "/sfrp" + callbackPath; c.Path != want {
 				t.Errorf("state cookie path = %q, expected %q", c.Path, want)
 			}
 			return
@@ -338,7 +338,7 @@ func TestWebRootPath(t *testing.T) {
 	}{
 		{"derived from request", "", "/"},
 		{"explicit root deployment", "https://dash.example.com" + callbackPath, "/"},
-		{"subpath proxy", "https://dash.example.com/llamadeck" + callbackPath, "/llamadeck/"},
+		{"subpath proxy", "https://dash.example.com/sfrp" + callbackPath, "/sfrp/"},
 		{"override not ending in callback path", "https://dash.example.com/elsewhere", "/"},
 	}
 	for _, tt := range tests {
@@ -358,15 +358,15 @@ func TestOIDCCallbackRedirectHonorsSubpath(t *testing.T) {
 	h := &Handler{oidc: &OIDCService{
 		stateKey: []byte("test-key"),
 		Sessions: auth.NewSessionStore(time.Hour),
-		cfg:      config.OIDCConfig{RedirectURL: "https://dash.example.com/llamadeck" + callbackPath},
+		cfg:      config.OIDCConfig{RedirectURL: "https://dash.example.com/sfrp" + callbackPath},
 	}}
 
 	req := httptest.NewRequest(http.MethodGet, callbackPath+"?state=x&code=y", nil)
 	recorder := httptest.NewRecorder()
 	h.OIDCCallback().ServeHTTP(recorder, req)
 
-	if loc := recorder.Header().Get("Location"); loc != "/llamadeck/?auth_error=state" {
-		t.Errorf("Location = %q, expected \"/llamadeck/?auth_error=state\"", loc)
+	if loc := recorder.Header().Get("Location"); loc != "/sfrp/?auth_error=state" {
+		t.Errorf("Location = %q, expected \"/sfrp/?auth_error=state\"", loc)
 	}
 }
 

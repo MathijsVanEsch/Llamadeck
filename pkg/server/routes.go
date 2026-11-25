@@ -8,8 +8,8 @@ import (
 	"github.com/go-chi/cors"
 	httpSwagger "github.com/swaggo/http-swagger"
 
-	_ "llamadeck/docs"
-	"llamadeck/webui"
+	_ "sfrp/docs"
+	"sfrp/webui"
 )
 
 func SetupRouter(handler *Handler) *chi.Mux {

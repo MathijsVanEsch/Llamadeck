@@ -3,9 +3,9 @@ package manager
 import (
 	"context"
 	"fmt"
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/database"
-	"llamadeck/pkg/instance"
+	"sfrp/pkg/config"
+	"sfrp/pkg/database"
+	"sfrp/pkg/instance"
 	"log"
 	"sort"
 	"sync"

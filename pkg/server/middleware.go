@@ -4,9 +4,9 @@ import (
 	"context"
 	"crypto/subtle"
 	"fmt"
-	"llamadeck/pkg/auth"
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/database"
+	"sfrp/pkg/auth"
+	"sfrp/pkg/config"
+	"sfrp/pkg/database"
 	"log"
 	"net/http"
 	"os"
@@ -43,7 +43,7 @@ func NewAPIAuthMiddleware(authCfg config.AuthConfig, authStore database.AuthStor
 	const banner = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 	if authCfg.RequireManagementAuth && len(authCfg.ManagementKeys) == 0 {
-		key, err := auth.GenerateKey("llamadeck-mgmt")
+		key, err := auth.GenerateKey("sfrp-mgmt")
 		if err != nil {
 			log.Printf("Warning: Failed to generate management key: %v", err)
 			// Fallback to PID-based key for safety

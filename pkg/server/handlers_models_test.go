@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/models"
-	"llamadeck/pkg/server"
+	"sfrp/pkg/config"
+	"sfrp/pkg/models"
+	"sfrp/pkg/server"
 )
 
 // newModelsTestHandler wires a real manager, temp cache, and dead HF endpoint.

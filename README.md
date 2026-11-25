@@ -1,10 +1,10 @@
-# llamadeck
+# sfrp
 
-![Build and Release](https://github.com/lordmathis/llamadeck/actions/workflows/release.yaml/badge.svg) ![Go Tests](https://github.com/lordmathis/llamadeck/actions/workflows/go_test.yaml/badge.svg) ![WebUI Tests](https://github.com/lordmathis/llamadeck/actions/workflows/webui_test.yaml/badge.svg) ![User Docs](https://github.com/lordmathis/llamadeck/actions/workflows/docs.yaml/badge.svg)
+![Build and Release](https://github.com/lordmathis/sfrp/actions/workflows/release.yaml/badge.svg) ![Go Tests](https://github.com/lordmathis/sfrp/actions/workflows/go_test.yaml/badge.svg) ![WebUI Tests](https://github.com/lordmathis/sfrp/actions/workflows/webui_test.yaml/badge.svg) ![User Docs](https://github.com/lordmathis/sfrp/actions/workflows/docs.yaml/badge.svg)
 
 **Unified management and routing for llama.cpp, MLX and vLLM models with web dashboard.**
 
-📚 **[Full Documentation →](https://llamadeck.org)**
+📚 **[Full Documentation →](https://sfrp.org)**
 
 ![Dashboard Screenshot](docs/images/dashboard.png)
 
@@ -28,8 +28,8 @@
 ## Quick Start
 
 1. Install a backend (llama.cpp, MLX, or vLLM) - see [Prerequisites](#prerequisites) below
-2. [Download llamadeck](#installation) for your platform
-3. Run `llamadeck` and open http://localhost:8080
+2. [Download sfrp](#installation) for your platform
+3. Run `sfrp` and open http://localhost:8080
 4. Create an instance and start inferencing!
 
 ## Prerequisites
@@ -77,7 +77,7 @@ pip install vllm
 
 ### Docker Support
 
-llamadeck can run backends in Docker containers, eliminating the need for local backend installation:
+sfrp can run backends in Docker containers, eliminating the need for local backend installation:
 
 ```yaml
 backends:
@@ -95,12 +95,12 @@ backends:
 
 ```bash
 # Linux/macOS - Get latest version and download
-LATEST_VERSION=$(curl -s https://api.github.com/repos/lordmathis/llamadeck/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-curl -L https://github.com/lordmathis/llamadeck/releases/download/${LATEST_VERSION}/llamadeck-${LATEST_VERSION}-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m).tar.gz | tar -xz
-sudo mv llamadeck /usr/local/bin/
+LATEST_VERSION=$(curl -s https://api.github.com/repos/lordmathis/sfrp/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+curl -L https://github.com/lordmathis/sfrp/releases/download/${LATEST_VERSION}/sfrp-${LATEST_VERSION}-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m).tar.gz | tar -xz
+sudo mv sfrp /usr/local/bin/
 
 # Or download manually from the releases page:
-# https://github.com/lordmathis/llamadeck/releases/latest
+# https://github.com/lordmathis/sfrp/releases/latest
 
 # Windows - Download from releases page
 ```
@@ -109,18 +109,18 @@ sudo mv llamadeck /usr/local/bin/
 
 ```bash
 # Clone repository and build Docker images
-git clone https://github.com/lordmathis/llamadeck.git
-cd llamadeck
+git clone https://github.com/lordmathis/sfrp.git
+cd sfrp
 mkdir -p data/llamacpp data/vllm models
 
-# Build and start llamadeck with llama.cpp CUDA backend
-docker-compose -f docker/docker-compose.yml up llamadeck-llamacpp -d
+# Build and start sfrp with llama.cpp CUDA backend
+docker-compose -f docker/docker-compose.yml up sfrp-llamacpp -d
 
-# Build and start llamadeck with vLLM CUDA backend
-docker-compose -f docker/docker-compose.yml up llamadeck-vllm -d
+# Build and start sfrp with vLLM CUDA backend
+docker-compose -f docker/docker-compose.yml up sfrp-vllm -d
 
 # Build from source using multi-stage build
-docker build -f docker/Dockerfile.source -t llamadeck:source .
+docker build -f docker/Dockerfile.source -t sfrp:source .
 ```
 
 **Note:** Dockerfiles are configured for CUDA. Adapt base images for other platforms (CPU, ROCm, etc.).
@@ -128,10 +128,10 @@ docker build -f docker/Dockerfile.source -t llamadeck:source .
 ### Option 3: Build from Source
 Requires Go 1.24+ and Node.js 22+
 ```bash
-git clone https://github.com/lordmathis/llamadeck.git
-cd llamadeck
+git clone https://github.com/lordmathis/sfrp.git
+cd sfrp
 cd webui && npm ci && npm run build && cd ..
-go build -o llamadeck ./cmd/server
+go build -o sfrp ./cmd/server
 ```
 
 ## Usage
@@ -144,10 +144,10 @@ go build -o llamadeck ./cmd/server
 
 ## Configuration
 
-llamadeck works out of the box with sensible defaults. Configuration is loaded with the following precedence:
+sfrp works out of the box with sensible defaults. Configuration is loaded with the following precedence:
 
 ```
-Defaults < .env file < Configuration file < LLAMADECK_* environment variables
+Defaults < .env file < Configuration file < SFRP_* environment variables
 ```
 
 Config files support `${VAR}` and `${VAR:-default}` placeholders, and a `.env` file is automatically loaded.
@@ -168,7 +168,7 @@ backends:
     docker:
       enabled: false
       image: "ghcr.io/ggml-org/llama.cpp:server"
-      args: ["run", "--rm", "--network", "host", "--gpus", "all", "-v", "~/.local/share/llamadeck/llama.cpp:/root/.cache/llama.cpp"]
+      args: ["run", "--rm", "--network", "host", "--gpus", "all", "-v", "~/.local/share/sfrp/llama.cpp:/root/.cache/llama.cpp"]
       environment: {}             # Environment variables for the container
 
   vllm:
@@ -178,7 +178,7 @@ backends:
     docker:
       enabled: false
       image: "vllm/vllm-openai:latest"
-      args: ["run", "--rm", "--network", "host", "--gpus", "all", "--shm-size", "1g", "-v", "~/.local/share/llamadeck/huggingface:/root/.cache/huggingface"]
+      args: ["run", "--rm", "--network", "host", "--gpus", "all", "--shm-size", "1g", "-v", "~/.local/share/sfrp/huggingface:/root/.cache/huggingface"]
       environment: {}             # Environment variables for the container
 
   mlx:
@@ -186,11 +186,11 @@ backends:
     args: []
     environment: {}               # Environment variables for the backend process
 
-data_dir: ~/.local/share/llamadeck  # Main data directory (database, instances, logs), default varies by OS
+data_dir: ~/.local/share/sfrp  # Main data directory (database, instances, logs), default varies by OS
 
 instances:
   port_range: [8000, 9000]                        # Port range for instances
-  logs_dir: ~/.local/share/llamadeck/logs          # Logs directory (platform dependent)
+  logs_dir: ~/.local/share/sfrp/logs          # Logs directory (platform dependent)
   auto_create_dirs: true                          # Auto-create data/config/logs dirs if missing
   max_instances: -1                               # Max instances (-1 = unlimited)
   max_running_instances: -1                       # Max running instances (-1 = unlimited)
@@ -208,7 +208,7 @@ instances:
   log_rotation_compress: false                    # Compress rotated log files (default: false)
 
 database:
-  path: ~/.local/share/llamadeck/llamadeck.db  # Database file path (platform dependent)
+  path: ~/.local/share/sfrp/sfrp.db  # Database file path (platform dependent)
   max_open_connections: 25                   # Maximum open database connections
   max_idle_connections: 5                    # Maximum idle database connections
   connection_max_lifetime: 5m                # Connection max lifetime

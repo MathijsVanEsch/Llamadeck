@@ -3,8 +3,8 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/models"
+	"sfrp/pkg/config"
+	"sfrp/pkg/models"
 	"net/http"
 	"net/http/httputil"
 	"net/url"

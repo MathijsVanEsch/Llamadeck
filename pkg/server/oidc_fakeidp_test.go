@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"llamadeck/pkg/config"
+	"sfrp/pkg/config"
 )
 
 // fakeIdP is a minimal OpenID Connect provider: discovery, a JWKS endpoint,
@@ -35,7 +35,7 @@ func newFakeIdP(t *testing.T) *fakeIdP {
 		t.Fatalf("generating signing key: %v", err)
 	}
 
-	idp := &fakeIdP{key: key, clientID: "llamadeck-test"}
+	idp := &fakeIdP{key: key, clientID: "sfrp-test"}
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/.well-known/openid-configuration", func(w http.ResponseWriter, _ *http.Request) {
@@ -67,7 +67,7 @@ func newFakeIdP(t *testing.T) *fakeIdP {
 			"sub":    "user-1",
 			"name":   "Alice",
 			"email":  "alice@example.com",
-			"groups": []string{"llamadeck-admins"},
+			"groups": []string{"sfrp-admins"},
 			"exp":    time.Now().Add(time.Hour).Unix(),
 			"iat":    time.Now().Unix(),
 			"nonce":  idp.nonce,
@@ -159,7 +159,7 @@ func TestOIDCFlowWithFakeIdP(t *testing.T) {
 			ClientSecret:  "test-secret",
 			Scopes:        []string{"openid", "profile", "email"},
 			GroupsClaim:   "groups",
-			AllowedGroups: []string{"llamadeck-admins"},
+			AllowedGroups: []string{"sfrp-admins"},
 			SessionTTL:    time.Hour,
 		}})
 		if err != nil {

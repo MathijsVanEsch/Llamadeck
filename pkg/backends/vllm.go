@@ -3,7 +3,7 @@ package backends
 import (
 	"encoding/json"
 	"fmt"
-	"llamadeck/pkg/validation"
+	"sfrp/pkg/validation"
 )
 
 // vllmMultiValuedFlags defines flags that should be repeated for each value rather than comma-separated
@@ -20,7 +20,7 @@ var vllmMultiValuedFlags = map[string]struct{}{
 }
 
 type VllmServerOptions struct {
-	// Basic connection options (auto-assigned by llamadeck)
+	// Basic connection options (auto-assigned by sfrp)
 	Host string `json:"host,omitempty"`
 	Port int    `json:"port,omitempty"`
 

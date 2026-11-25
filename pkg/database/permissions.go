@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"llamadeck/pkg/auth"
+	"sfrp/pkg/auth"
 )
 
 // GetPermissions retrieves all permissions for a key

@@ -3,7 +3,7 @@ package backends
 import (
 	"encoding/json"
 	"fmt"
-	"llamadeck/pkg/validation"
+	"sfrp/pkg/validation"
 )
 
 type MlxServerOptions struct {

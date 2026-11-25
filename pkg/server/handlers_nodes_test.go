@@ -8,8 +8,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/server"
+	"sfrp/pkg/config"
+	"sfrp/pkg/server"
 )
 
 func newNodesTestHandler(t *testing.T, nodes map[string]config.NodeConfig, localNode string) http.Handler {

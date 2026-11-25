@@ -30,7 +30,7 @@ interface AuthProviderProps {
   children: ReactNode
 }
 
-const AUTH_STORAGE_KEY = 'llamadeck_management_key'
+const AUTH_STORAGE_KEY = 'sfrp_management_key'
 
 // Error codes the OIDC callback redirects back with (?auth_error=<code>);
 // mapped to messages shown in the login dialog.
@@ -137,8 +137,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setAuthMethod(null)
       setIsAuthenticated(false)
     }
-    window.addEventListener('llamadeck:unauthorized', onUnauthorized)
-    return () => window.removeEventListener('llamadeck:unauthorized', onUnauthorized)
+    window.addEventListener('sfrp:unauthorized', onUnauthorized)
+    return () => window.removeEventListener('sfrp:unauthorized', onUnauthorized)
   }, [])
 
   const login = useCallback(async (key: string) => {

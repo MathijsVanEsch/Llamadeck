@@ -136,7 +136,7 @@ func (p *proxy) build() (*httputil.ReverseProxy, error) {
 		// Add custom headers to the request
 		proxy.ModifyResponse = func(resp *http.Response) error {
 			// Remove CORS headers from backend response to avoid conflicts
-			// llamadeck will add its own CORS headers
+			// sfrp will add its own CORS headers
 			resp.Header.Del("Access-Control-Allow-Origin")
 			resp.Header.Del("Access-Control-Allow-Methods")
 			resp.Header.Del("Access-Control-Allow-Headers")
