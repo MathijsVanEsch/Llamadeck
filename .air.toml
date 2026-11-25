@@ -1,22 +1,22 @@
 #:schema https://json.schemastore.org/any.json
 
 # Live-reload loop for development: `air` (https://github.com/air-verse/air)
-# Rebuilds ./tmp/llamadeck and restarts the server on every .go save.
+# Rebuilds ./tmp/sfrp and restarts the server on every .go save.
 
 root = "."
 tmp_dir = "tmp"
 
 [build]
-cmd = "go build -o ./tmp/llamadeck ./cmd/server"
-entrypoint = ["./tmp/llamadeck"]
-full_bin = "LLAMADECK_CONFIG_PATH=llamadeck.dev.yaml ./tmp/llamadeck"
+cmd = "go build -o ./tmp/sfrp ./cmd/server"
+entrypoint = ["./tmp/sfrp"]
+full_bin = "SFRP_CONFIG_PATH=sfrp.dev.yaml ./tmp/sfrp"
 send_interrupt = true
 kill_delay = "3s"
 stop_on_error = false
 delay = 500
 
 include_ext = ["go"]
-include_file = ["llamadeck.dev.yaml"]
+include_file = ["sfrp.dev.yaml"]
 exclude_regex = ["_test\\.go"]
 exclude_dir = ["tmp", "webui/node_modules", "webui/dist", "docs", "docker"]
 

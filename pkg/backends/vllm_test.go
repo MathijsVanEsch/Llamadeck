@@ -1,8 +1,8 @@
 package backends_test
 
 import (
-	"llamadeck/pkg/backends"
-	"llamadeck/pkg/testutil"
+	"sfrp/pkg/backends"
+	"sfrp/pkg/testutil"
 	"testing"
 )
 

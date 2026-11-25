@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 	"errors"
-	"llamadeck/pkg/auth"
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/database"
+	"sfrp/pkg/auth"
+	"sfrp/pkg/config"
+	"sfrp/pkg/database"
 	"testing"
 )
 

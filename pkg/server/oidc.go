@@ -20,13 +20,13 @@ import (
 	"github.com/coreos/go-oidc/v3/oidc"
 	"golang.org/x/oauth2"
 
-	"llamadeck/pkg/auth"
-	"llamadeck/pkg/config"
+	"sfrp/pkg/auth"
+	"sfrp/pkg/config"
 )
 
 const (
-	sessionCookieName = "llamadeck_session"
-	stateCookieName   = "llamadeck_oidc_state"
+	sessionCookieName = "sfrp_session"
+	stateCookieName   = "sfrp_oidc_state"
 	callbackPath      = "/api/v1/auth/oidc/callback"
 	stateCookieTTL    = 5 * time.Minute
 )

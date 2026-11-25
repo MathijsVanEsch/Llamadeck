@@ -2,7 +2,7 @@ package backends
 
 import (
 	"fmt"
-	"llamadeck/pkg/config"
+	"sfrp/pkg/config"
 	"reflect"
 	"strconv"
 	"strings"

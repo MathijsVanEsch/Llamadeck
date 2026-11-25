@@ -1,8 +1,8 @@
 package server_test
 
 import (
-	"llamadeck/pkg/config"
-	"llamadeck/pkg/server"
+	"sfrp/pkg/config"
+	"sfrp/pkg/server"
 	"net/http"
 	"net/http/httptest"
 	"strings"

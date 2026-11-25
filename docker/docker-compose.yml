@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  llamadeck-llamacpp:
+  sfrp-llamacpp:
     build:
       context: ..
       dockerfile: docker/Dockerfile.llamacpp
-    image: llamadeck:llamacpp-cuda
-    container_name: llamadeck-llamacpp
+    image: sfrp:llamacpp-cuda
+    container_name: sfrp-llamacpp
     ports:
       - "8080:8080"
     volumes:
@@ -15,9 +15,9 @@ services:
       - ~/.cache/llama.cpp:/root/.cache/llama.cpp  # Llama.cpp cache
     environment:
       # Set data directory for persistence
-      - LLAMADECK_DATA_DIR=/data
+      - SFRP_DATA_DIR=/data
       # Enable Docker mode for nested containers (if needed)
-      - LLAMADECK_LLAMACPP_DOCKER_ENABLED=false
+      - SFRP_LLAMACPP_DOCKER_ENABLED=false
     deploy:
       resources:
         reservations:
@@ -27,12 +27,12 @@ services:
               capabilities: [gpu]
     restart: unless-stopped
 
-  llamadeck-vllm:
+  sfrp-vllm:
     build:
       context: ..
       dockerfile: docker/Dockerfile.vllm
-    image: llamadeck:vllm-cuda
-    container_name: llamadeck-vllm
+    image: sfrp:vllm-cuda
+    container_name: sfrp-vllm
     ports:
       - "8081:8080"  # Use different port to avoid conflicts
     volumes:
@@ -41,9 +41,9 @@ services:
       - ~/.cache/huggingface:/root/.cache/huggingface  # HuggingFace cache
     environment:
       # Set data directory for persistence
-      - LLAMADECK_DATA_DIR=/data
+      - SFRP_DATA_DIR=/data
       # Enable Docker mode for nested containers (if needed)
-      - LLAMADECK_VLLM_DOCKER_ENABLED=false
+      - SFRP_VLLM_DOCKER_ENABLED=false
       # vLLM specific environment variables
       - CUDA_VISIBLE_DEVICES=all
     deploy:

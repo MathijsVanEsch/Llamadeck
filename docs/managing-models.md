@@ -1,6 +1,6 @@
 # Managing Models
 
-Llamadeck provides built-in model management capabilities for downloading models directly from HuggingFace without manually managing files. It supports both **GGUF** models (for llama.cpp) and **Safetensors** models (for vLLM and MLX backends).
+SFRP provides built-in model management capabilities for downloading models directly from HuggingFace without manually managing files. It supports both **GGUF** models (for llama.cpp) and **Safetensors** models (for vLLM and MLX backends).
 
 ## Overview
 
@@ -24,12 +24,12 @@ Downloaded models are cached in the following default locations:
 
 The cache directory can be customized using:
 - Configuration file: `backends.llama_cpp.cache_dir`
-- Environment variable: `LLAMADECK_LLAMACPP_CACHE_DIR`
+- Environment variable: `SFRP_LLAMACPP_CACHE_DIR`
 - Environment variable: `LLAMA_CACHE` (standard llama.cpp convention)
 
 ## Supported Formats
 
-Llamadeck supports downloading models in two formats:
+SFRP supports downloading models in two formats:
 
 ### GGUF (for llama.cpp)
 
@@ -52,7 +52,7 @@ Safetensors is the standard model format used by HuggingFace. Downloads include 
 
 ### Using the Web UI
 
-1. Open the Llamadeck web interface
+1. Open the SFRP web interface
 2. Navigate to the **Models** tab
 3. Click **Download Model**
 4. Select the **Format**: **GGUF** or **Safetensors**
@@ -145,7 +145,7 @@ To download private HuggingFace models, set the `HF_TOKEN` environment variable:
 
 ```bash
 export HF_TOKEN="hf_your_token_here"
-llamadeck
+sfrp
 ```
 
 The token will be used to authenticate requests to HuggingFace.

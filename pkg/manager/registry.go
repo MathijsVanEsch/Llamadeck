@@ -2,7 +2,7 @@ package manager
 
 import (
 	"fmt"
-	"llamadeck/pkg/instance"
+	"sfrp/pkg/instance"
 	"sync"
 )
 

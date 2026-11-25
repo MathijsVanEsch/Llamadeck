@@ -3,8 +3,8 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"llamadeck/pkg/backends"
-	"llamadeck/pkg/instance"
+	"sfrp/pkg/backends"
+	"sfrp/pkg/instance"
 	"net/http"
 	"os/exec"
 	"strings"

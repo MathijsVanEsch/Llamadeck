@@ -1,12 +1,12 @@
 # Configuration
 
-llamadeck can be configured via configuration files or environment variables. Configuration is loaded in the following order of precedence:
+sfrp can be configured via configuration files or environment variables. Configuration is loaded in the following order of precedence:
 
 ```
-Defaults < .env file < Configuration file (with env var expansion) < LLAMADECK_* environment variables
+Defaults < .env file < Configuration file (with env var expansion) < SFRP_* environment variables
 ```
 
-llamadeck works out of the box with sensible defaults, but you can customize the behavior to suit your needs.
+sfrp works out of the box with sensible defaults, but you can customize the behavior to suit your needs.
 
 ## Default Configuration
 
@@ -49,7 +49,7 @@ backends:
     environment: {}              # Environment variables for the backend process
     response_headers: {}         # Additional response headers to send with responses
 
-data_dir: ~/.local/share/llamadeck  # Main data directory (database, instances, logs), default varies by OS
+data_dir: ~/.local/share/sfrp  # Main data directory (database, instances, logs), default varies by OS
 
 instances:
   port_range: [8000, 9000]         # Port range for instances
@@ -69,7 +69,7 @@ instances:
   group_limits: {}                 # Per-group running instance limits (e.g., {large: 1, small: 3})
 
 database:
-  path: data_dir/llamadeck.db              # Database file path
+  path: data_dir/sfrp.db              # Database file path
   max_open_connections: 25       # Maximum open database connections
   max_idle_connections: 5        # Maximum idle database connections
   connection_max_lifetime: 5m    # Connection max lifetime
@@ -91,22 +91,22 @@ nodes:                           # Node configuration for multi-node deployment
 Configuration files are searched in the following locations (in order of precedence, first found is used):
 
 **Linux:**  
-- `./llamadeck.yaml` or `./config.yaml` (current directory)  
-- `$HOME/.config/llamadeck/config.yaml`  
-- `/etc/llamadeck/config.yaml`  
+- `./sfrp.yaml` or `./config.yaml` (current directory)  
+- `$HOME/.config/sfrp/config.yaml`  
+- `/etc/sfrp/config.yaml`  
 
 **macOS:**  
-- `./llamadeck.yaml` or `./config.yaml` (current directory)  
-- `$HOME/Library/Application Support/llamadeck/config.yaml`  
-- `/Library/Application Support/llamadeck/config.yaml`  
+- `./sfrp.yaml` or `./config.yaml` (current directory)  
+- `$HOME/Library/Application Support/sfrp/config.yaml`  
+- `/Library/Application Support/sfrp/config.yaml`  
 
 **Windows:**  
-- `./llamadeck.yaml` or `./config.yaml` (current directory)  
-- `%APPDATA%\llamadeck\config.yaml`  
-- `%USERPROFILE%\llamadeck\config.yaml`  
-- `%PROGRAMDATA%\llamadeck\config.yaml`  
+- `./sfrp.yaml` or `./config.yaml` (current directory)  
+- `%APPDATA%\sfrp\config.yaml`  
+- `%USERPROFILE%\sfrp\config.yaml`  
+- `%PROGRAMDATA%\sfrp\config.yaml`  
 
-You can specify the path to config file with `LLAMADECK_CONFIG_PATH` environment variable.
+You can specify the path to config file with `SFRP_CONFIG_PATH` environment variable.
 
 ### Environment Variable Expansion
 
@@ -146,10 +146,10 @@ server:
 ```
 
 **Environment Variables:**
-- `LLAMADECK_HOST` - Server host
-- `LLAMADECK_PORT` - Server port
-- `LLAMADECK_ALLOWED_ORIGINS` - Comma-separated CORS origins
-- `LLAMADECK_ENABLE_SWAGGER` - Enable Swagger UI (true/false)
+- `SFRP_HOST` - Server host
+- `SFRP_PORT` - Server port
+- `SFRP_ALLOWED_ORIGINS` - Comma-separated CORS origins
+- `SFRP_ENABLE_SWAGGER` - Enable Swagger UI (true/false)
 
 ### Backend Configuration
 ```yaml
@@ -198,35 +198,35 @@ backends:
   - `args`: Additional arguments passed to `docker run`
   - `environment`: Environment variables for the container (optional)
 
-> If llamadeck is behind an NGINX proxy, `X-Accel-Buffering: no` response header may be required for NGINX to properly stream the responses without buffering.
+> If sfrp is behind an NGINX proxy, `X-Accel-Buffering: no` response header may be required for NGINX to properly stream the responses without buffering.
 
 **Environment Variables:**
 
 **LlamaCpp Backend:**
-- `LLAMADECK_LLAMACPP_COMMAND` - LlamaCpp executable command
-- `LLAMADECK_LLAMACPP_ARGS` - Space-separated default arguments
-- `LLAMADECK_LLAMACPP_ENV` - Environment variables in format "KEY1=value1,KEY2=value2"
-- `LLAMADECK_LLAMACPP_DOCKER_ENABLED` - Enable Docker runtime (true/false)
-- `LLAMADECK_LLAMACPP_DOCKER_IMAGE` - Docker image to use
-- `LLAMADECK_LLAMACPP_DOCKER_ARGS` - Space-separated Docker arguments
-- `LLAMADECK_LLAMACPP_DOCKER_ENV` - Docker environment variables in format "KEY1=value1,KEY2=value2"
-- `LLAMADECK_LLAMACPP_RESPONSE_HEADERS` - Response headers in format "KEY1=value1;KEY2=value2"
+- `SFRP_LLAMACPP_COMMAND` - LlamaCpp executable command
+- `SFRP_LLAMACPP_ARGS` - Space-separated default arguments
+- `SFRP_LLAMACPP_ENV` - Environment variables in format "KEY1=value1,KEY2=value2"
+- `SFRP_LLAMACPP_DOCKER_ENABLED` - Enable Docker runtime (true/false)
+- `SFRP_LLAMACPP_DOCKER_IMAGE` - Docker image to use
+- `SFRP_LLAMACPP_DOCKER_ARGS` - Space-separated Docker arguments
+- `SFRP_LLAMACPP_DOCKER_ENV` - Docker environment variables in format "KEY1=value1,KEY2=value2"
+- `SFRP_LLAMACPP_RESPONSE_HEADERS` - Response headers in format "KEY1=value1;KEY2=value2"
 
 **VLLM Backend:**
-- `LLAMADECK_VLLM_COMMAND` - VLLM executable command
-- `LLAMADECK_VLLM_ARGS` - Space-separated default arguments
-- `LLAMADECK_VLLM_ENV` - Environment variables in format "KEY1=value1,KEY2=value2"
-- `LLAMADECK_VLLM_DOCKER_ENABLED` - Enable Docker runtime (true/false)
-- `LLAMADECK_VLLM_DOCKER_IMAGE` - Docker image to use
-- `LLAMADECK_VLLM_DOCKER_ARGS` - Space-separated Docker arguments
-- `LLAMADECK_VLLM_DOCKER_ENV` - Docker environment variables in format "KEY1=value1,KEY2=value2"
-- `LLAMADECK_VLLM_RESPONSE_HEADERS` - Response headers in format "KEY1=value1;KEY2=value2"
+- `SFRP_VLLM_COMMAND` - VLLM executable command
+- `SFRP_VLLM_ARGS` - Space-separated default arguments
+- `SFRP_VLLM_ENV` - Environment variables in format "KEY1=value1,KEY2=value2"
+- `SFRP_VLLM_DOCKER_ENABLED` - Enable Docker runtime (true/false)
+- `SFRP_VLLM_DOCKER_IMAGE` - Docker image to use
+- `SFRP_VLLM_DOCKER_ARGS` - Space-separated Docker arguments
+- `SFRP_VLLM_DOCKER_ENV` - Docker environment variables in format "KEY1=value1,KEY2=value2"
+- `SFRP_VLLM_RESPONSE_HEADERS` - Response headers in format "KEY1=value1;KEY2=value2"
 
 **MLX Backend:**
-- `LLAMADECK_MLX_COMMAND` - MLX executable command
-- `LLAMADECK_MLX_ARGS` - Space-separated default arguments
-- `LLAMADECK_MLX_ENV` - Environment variables in format "KEY1=value1,KEY2=value2"
-- `LLAMADECK_MLX_RESPONSE_HEADERS` - Response headers in format "KEY1=value1;KEY2=value2"
+- `SFRP_MLX_COMMAND` - MLX executable command
+- `SFRP_MLX_ARGS` - Space-separated default arguments
+- `SFRP_MLX_ENV` - Environment variables in format "KEY1=value1,KEY2=value2"
+- `SFRP_MLX_RESPONSE_HEADERS` - Response headers in format "KEY1=value1;KEY2=value2"
 
 ### Custom Backends
 
@@ -251,16 +251,16 @@ backends:
 ### Data Directory Configuration
 
 ```yaml
-data_dir: "~/.local/share/llamadeck"  # Main data directory for database, instances, and logs (default varies by OS)
+data_dir: "~/.local/share/sfrp"  # Main data directory for database, instances, and logs (default varies by OS)
 ```
 
 **Environment Variables:**
-- `LLAMADECK_DATA_DIRECTORY` - Main data directory path
+- `SFRP_DATA_DIRECTORY` - Main data directory path
 
 **Default Data Directory by Platform:**
-- **Linux**: `~/.local/share/llamadeck`
-- **macOS**: `~/Library/Application Support/llamadeck`
-- **Windows**: `%LOCALAPPDATA%\llamadeck` or `%PROGRAMDATA%\llamadeck`
+- **Linux**: `~/.local/share/sfrp`
+- **macOS**: `~/Library/Application Support/sfrp`
+- **Windows**: `%LOCALAPPDATA%\sfrp` or `%PROGRAMDATA%\sfrp`
 
 ### Instance Configuration
 
@@ -287,44 +287,44 @@ instances:
 ```
 
 **Environment Variables:**
-- `LLAMADECK_INSTANCE_PORT_RANGE` - Port range (format: "8000-9000" or "8000,9000")
-- `LLAMADECK_INSTANCES_DIR` - Instance configs directory path
-- `LLAMADECK_LOGS_DIR` - Log directory path
-- `LLAMADECK_AUTO_CREATE_DATA_DIR` - Auto-create data/config/logs directories (true/false)
-- `LLAMADECK_MAX_INSTANCES` - Maximum number of instances  
-- `LLAMADECK_MAX_RUNNING_INSTANCES` - Maximum number of running instances
-- `LLAMADECK_ENABLE_LRU_EVICTION` - Enable LRU eviction for idle instances
-- `LLAMADECK_DEFAULT_IDLE_TIMEOUT` - Default idle timeout in minutes (0 = no timeout)
-- `LLAMADECK_DEFAULT_AUTO_RESTART` - Default auto-restart setting (true/false)  
-- `LLAMADECK_DEFAULT_MAX_RESTARTS` - Default maximum restarts  
-- `LLAMADECK_DEFAULT_RESTART_DELAY` - Default restart delay in seconds  
-- `LLAMADECK_DEFAULT_ON_DEMAND_START` - Default on-demand start setting (true/false)  
-- `LLAMADECK_ON_DEMAND_START_TIMEOUT` - Default on-demand start timeout in seconds
-- `LLAMADECK_TIMEOUT_CHECK_INTERVAL` - Default instance timeout check interval in minutes
-- `LLAMADECK_GROUP_LIMITS` - Per-group running instance limits (format: "group1=2,group2=1")
-- `LLAMADECK_LOG_ROTATION_ENABLED` - Enable log rotation (true/false)
-- `LLAMADECK_LOG_ROTATION_MAX_SIZE` - Max log file size in MB
-- `LLAMADECK_LOG_ROTATION_COMPRESS` - Compress rotated logs (true/false)
+- `SFRP_INSTANCE_PORT_RANGE` - Port range (format: "8000-9000" or "8000,9000")
+- `SFRP_INSTANCES_DIR` - Instance configs directory path
+- `SFRP_LOGS_DIR` - Log directory path
+- `SFRP_AUTO_CREATE_DATA_DIR` - Auto-create data/config/logs directories (true/false)
+- `SFRP_MAX_INSTANCES` - Maximum number of instances  
+- `SFRP_MAX_RUNNING_INSTANCES` - Maximum number of running instances
+- `SFRP_ENABLE_LRU_EVICTION` - Enable LRU eviction for idle instances
+- `SFRP_DEFAULT_IDLE_TIMEOUT` - Default idle timeout in minutes (0 = no timeout)
+- `SFRP_DEFAULT_AUTO_RESTART` - Default auto-restart setting (true/false)  
+- `SFRP_DEFAULT_MAX_RESTARTS` - Default maximum restarts  
+- `SFRP_DEFAULT_RESTART_DELAY` - Default restart delay in seconds  
+- `SFRP_DEFAULT_ON_DEMAND_START` - Default on-demand start setting (true/false)  
+- `SFRP_ON_DEMAND_START_TIMEOUT` - Default on-demand start timeout in seconds
+- `SFRP_TIMEOUT_CHECK_INTERVAL` - Default instance timeout check interval in minutes
+- `SFRP_GROUP_LIMITS` - Per-group running instance limits (format: "group1=2,group2=1")
+- `SFRP_LOG_ROTATION_ENABLED` - Enable log rotation (true/false)
+- `SFRP_LOG_ROTATION_MAX_SIZE` - Max log file size in MB
+- `SFRP_LOG_ROTATION_COMPRESS` - Compress rotated logs (true/false)
 
 ### Database Configuration
 
 ```yaml
 database:
-  path: "llamadeck.db"              # Database file path, default: data_dir/llamadeck.db
+  path: "sfrp.db"              # Database file path, default: data_dir/sfrp.db
   max_open_connections: 25         # Maximum open database connections (default: 25)
   max_idle_connections: 5          # Maximum idle database connections (default: 5)
   connection_max_lifetime: 5m      # Connection max lifetime (default: 5m)
 ```
 
 **Environment Variables:**
-- `LLAMADECK_DATABASE_PATH` - Database file path (relative to data_dir or absolute)
-- `LLAMADECK_DATABASE_MAX_OPEN_CONNECTIONS` - Maximum open database connections
-- `LLAMADECK_DATABASE_MAX_IDLE_CONNECTIONS` - Maximum idle database connections
-- `LLAMADECK_DATABASE_CONN_MAX_LIFETIME` - Connection max lifetime (e.g., "5m", "1h")
+- `SFRP_DATABASE_PATH` - Database file path (relative to data_dir or absolute)
+- `SFRP_DATABASE_MAX_OPEN_CONNECTIONS` - Maximum open database connections
+- `SFRP_DATABASE_MAX_IDLE_CONNECTIONS` - Maximum idle database connections
+- `SFRP_DATABASE_CONN_MAX_LIFETIME` - Connection max lifetime (e.g., "5m", "1h")
 
 ### Authentication Configuration
 
-llamadeck supports three authentication mechanisms:
+sfrp supports three authentication mechanisms:
 
 - **Management API Keys**: For accessing the web UI and management API (creating/managing instances). These can be configured in the config file or via environment variables.
 - **Inference API Keys**: For accessing the OpenAI-compatible inference endpoints. These are managed via the web UI (Settings → API Keys) and stored in the database.
@@ -342,9 +342,9 @@ auth:
 Inference API keys are created and managed via the web UI or management API
 
 **Environment Variables:**
-- `LLAMADECK_REQUIRE_INFERENCE_AUTH` - Require auth for OpenAI endpoints (true/false)
-- `LLAMADECK_REQUIRE_MANAGEMENT_AUTH` - Require auth for management endpoints (true/false)
-- `LLAMADECK_MANAGEMENT_KEYS` - Comma-separated management API keys
+- `SFRP_REQUIRE_INFERENCE_AUTH` - Require auth for OpenAI endpoints (true/false)
+- `SFRP_REQUIRE_MANAGEMENT_AUTH` - Require auth for management endpoints (true/false)
+- `SFRP_MANAGEMENT_KEYS` - Comma-separated management API keys
 
 #### OIDC / SSO Login
 
@@ -353,8 +353,8 @@ The web UI can authenticate users through an OpenID Connect provider (Authentik,
 ```yaml
 auth:
   oidc:
-    issuer_url: "https://authentik.example.com/application/o/llamadeck/"  # IdP issuer URL
-    client_id: "llamadeck"                  # OAuth2 client ID registered with the IdP
+    issuer_url: "https://authentik.example.com/application/o/sfrp/"  # IdP issuer URL
+    client_id: "sfrp"                  # OAuth2 client ID registered with the IdP
     client_secret: "your-client-secret"    # OAuth2 client secret
     # redirect_url: ""                     # Optional; derived from the request when empty
     # scopes: [openid, profile, email]     # Default scopes
@@ -365,21 +365,21 @@ auth:
 ```
 
 **Environment Variables:**
-- `LLAMADECK_AUTH_OIDC_ISSUER_URL` - IdP issuer URL
-- `LLAMADECK_AUTH_OIDC_CLIENT_ID` - OAuth2 client ID
-- `LLAMADECK_AUTH_OIDC_CLIENT_SECRET` - OAuth2 client secret
-- `LLAMADECK_AUTH_OIDC_REDIRECT_URL` - Redirect URL override
-- `LLAMADECK_AUTH_OIDC_SCOPES` - Comma-separated scopes
-- `LLAMADECK_AUTH_OIDC_ALLOWED_GROUPS` - Comma-separated groups allowed to log in
-- `LLAMADECK_AUTH_OIDC_GROUPS_CLAIM` - Name of the ID-token claim carrying groups (default: `groups`)
-- `LLAMADECK_AUTH_OIDC_SESSION_TTL` - Session lifetime (Go duration, e.g. `12h`)
-- `LLAMADECK_AUTH_OIDC_SECURE_COOKIE` - Mark the session cookie Secure (true/false)
+- `SFRP_AUTH_OIDC_ISSUER_URL` - IdP issuer URL
+- `SFRP_AUTH_OIDC_CLIENT_ID` - OAuth2 client ID
+- `SFRP_AUTH_OIDC_CLIENT_SECRET` - OAuth2 client secret
+- `SFRP_AUTH_OIDC_REDIRECT_URL` - Redirect URL override
+- `SFRP_AUTH_OIDC_SCOPES` - Comma-separated scopes
+- `SFRP_AUTH_OIDC_ALLOWED_GROUPS` - Comma-separated groups allowed to log in
+- `SFRP_AUTH_OIDC_GROUPS_CLAIM` - Name of the ID-token claim carrying groups (default: `groups`)
+- `SFRP_AUTH_OIDC_SESSION_TTL` - Session lifetime (Go duration, e.g. `12h`)
+- `SFRP_AUTH_OIDC_SECURE_COOKIE` - Mark the session cookie Secure (true/false)
 
 See [Authentication](authentication.md#oidc-sso-login) for IdP client setup.
 
 ### Remote Node Configuration
 
-llamadeck supports remote node deployments. Configure remote nodes to deploy instances on remote hosts and manage them centrally.
+sfrp supports remote node deployments. Configure remote nodes to deploy instances on remote hosts and manage them centrally.
 
 ```yaml
 local_node: "main"               # Name of the local node (default: "main")
@@ -399,4 +399,4 @@ nodes:                           # Node configuration map
   - `api_key`: Management API key for authenticating with the remote node
 
 **Environment Variables:**
-- `LLAMADECK_LOCAL_NODE` - Name of the local node
+- `SFRP_LOCAL_NODE` - Name of the local node

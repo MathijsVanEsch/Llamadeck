@@ -1,10 +1,10 @@
-# Llamadeck Documentation
+# SFRP Documentation
 
-Welcome to the Llamadeck documentation!  
+Welcome to the SFRP documentation!  
 
 ![Dashboard Screenshot](images/dashboard.png)
 
-## What is Llamadeck?
+## What is SFRP?
 
 **{{HEADLINE}}**
 
@@ -14,9 +14,9 @@ Welcome to the Llamadeck documentation!
 
 ## Quick Links
 
-- [Installation Guide](installation.md) - Get Llamadeck up and running
+- [Installation Guide](installation.md) - Get SFRP up and running
 - [Configuration Guide](configuration.md) - Detailed configuration options
-- [Quick Start](quick-start.md) - Your first steps with Llamadeck
+- [Quick Start](quick-start.md) - Your first steps with SFRP
 - [Authentication](authentication.md) - API keys, permissions, and SSO login
 - [Managing Instances](managing-instances.md) - Instance lifecycle management
 - [Managing Models](managing-models.md) - Download and manage models from HuggingFace
@@ -29,9 +29,9 @@ Welcome to the Llamadeck documentation!
 If you need help or have questions:
 
 - Check the [Troubleshooting](troubleshooting.md) guide
-- Visit the [GitHub repository](https://github.com/lordmathis/llamadeck)
+- Visit the [GitHub repository](https://github.com/lordmathis/sfrp)
 - Review the [Configuration Guide](configuration.md) for advanced settings
 
 ## License
 
-MIT License - see the [LICENSE](https://github.com/lordmathis/llamadeck/blob/main/LICENSE) file.
+MIT License - see the [LICENSE](https://github.com/lordmathis/sfrp/blob/main/LICENSE) file.

@@ -10,75 +10,75 @@ import (
 // loadEnvVars overrides config with environment variables
 func loadEnvVars(cfg *AppConfig) {
 	// Server config
-	if host := os.Getenv("LLAMADECK_HOST"); host != "" {
+	if host := os.Getenv("SFRP_HOST"); host != "" {
 		cfg.Server.Host = host
 	}
-	if port := os.Getenv("LLAMADECK_PORT"); port != "" {
+	if port := os.Getenv("SFRP_PORT"); port != "" {
 		if p, err := strconv.Atoi(port); err == nil {
 			cfg.Server.Port = p
 		}
 	}
-	if allowedOrigins := os.Getenv("LLAMADECK_ALLOWED_ORIGINS"); allowedOrigins != "" {
+	if allowedOrigins := os.Getenv("SFRP_ALLOWED_ORIGINS"); allowedOrigins != "" {
 		cfg.Server.AllowedOrigins = strings.Split(allowedOrigins, ",")
 	}
-	if enableSwagger := os.Getenv("LLAMADECK_ENABLE_SWAGGER"); enableSwagger != "" {
+	if enableSwagger := os.Getenv("SFRP_ENABLE_SWAGGER"); enableSwagger != "" {
 		if b, err := strconv.ParseBool(enableSwagger); err == nil {
 			cfg.Server.EnableSwagger = b
 		}
 	}
 
 	// Data config
-	if dataDir := os.Getenv("LLAMADECK_DATA_DIRECTORY"); dataDir != "" {
+	if dataDir := os.Getenv("SFRP_DATA_DIRECTORY"); dataDir != "" {
 		cfg.DataDir = dataDir
 	}
-	if logsDir := os.Getenv("LLAMADECK_LOGS_DIR"); logsDir != "" {
+	if logsDir := os.Getenv("SFRP_LOGS_DIR"); logsDir != "" {
 		cfg.Instances.LogsDir = logsDir
 	}
-	if instancesDir := os.Getenv("LLAMADECK_INSTANCES_DIR"); instancesDir != "" {
+	if instancesDir := os.Getenv("SFRP_INSTANCES_DIR"); instancesDir != "" {
 		cfg.Instances.InstancesDir = instancesDir
 	}
-	if autoCreate := os.Getenv("LLAMADECK_AUTO_CREATE_DATA_DIR"); autoCreate != "" {
+	if autoCreate := os.Getenv("SFRP_AUTO_CREATE_DATA_DIR"); autoCreate != "" {
 		if b, err := strconv.ParseBool(autoCreate); err == nil {
 			cfg.Instances.AutoCreateDirs = b
 		}
 	}
 
 	// Instance config
-	if portRange := os.Getenv("LLAMADECK_INSTANCE_PORT_RANGE"); portRange != "" {
+	if portRange := os.Getenv("SFRP_INSTANCE_PORT_RANGE"); portRange != "" {
 		if ports := ParsePortRange(portRange); ports != [2]int{0, 0} {
 			cfg.Instances.PortRange = ports
 		}
 	}
-	if maxInstances := os.Getenv("LLAMADECK_MAX_INSTANCES"); maxInstances != "" {
+	if maxInstances := os.Getenv("SFRP_MAX_INSTANCES"); maxInstances != "" {
 		if m, err := strconv.Atoi(maxInstances); err == nil {
 			cfg.Instances.MaxInstances = m
 		}
 	}
-	if maxRunning := os.Getenv("LLAMADECK_MAX_RUNNING_INSTANCES"); maxRunning != "" {
+	if maxRunning := os.Getenv("SFRP_MAX_RUNNING_INSTANCES"); maxRunning != "" {
 		if m, err := strconv.Atoi(maxRunning); err == nil {
 			cfg.Instances.MaxRunningInstances = m
 		}
 	}
-	if enableLRUEviction := os.Getenv("LLAMADECK_ENABLE_LRU_EVICTION"); enableLRUEviction != "" {
+	if enableLRUEviction := os.Getenv("SFRP_ENABLE_LRU_EVICTION"); enableLRUEviction != "" {
 		if b, err := strconv.ParseBool(enableLRUEviction); err == nil {
 			cfg.Instances.EnableLRUEviction = b
 		}
 	}
 	// Backend config
 	// LlamaCpp backend
-	if llamaCmd := os.Getenv("LLAMADECK_LLAMACPP_COMMAND"); llamaCmd != "" {
+	if llamaCmd := os.Getenv("SFRP_LLAMACPP_COMMAND"); llamaCmd != "" {
 		cfg.Backends.LlamaCpp.Command = llamaCmd
 	}
-	if llamaArgs := os.Getenv("LLAMADECK_LLAMACPP_ARGS"); llamaArgs != "" {
+	if llamaArgs := os.Getenv("SFRP_LLAMACPP_ARGS"); llamaArgs != "" {
 		cfg.Backends.LlamaCpp.Args = strings.Split(llamaArgs, " ")
 	}
-	if llamaEnv := os.Getenv("LLAMADECK_LLAMACPP_ENV"); llamaEnv != "" {
+	if llamaEnv := os.Getenv("SFRP_LLAMACPP_ENV"); llamaEnv != "" {
 		if cfg.Backends.LlamaCpp.Environment == nil {
 			cfg.Backends.LlamaCpp.Environment = make(map[string]string)
 		}
 		parseEnvVars(llamaEnv, cfg.Backends.LlamaCpp.Environment)
 	}
-	if llamaDockerEnabled := os.Getenv("LLAMADECK_LLAMACPP_DOCKER_ENABLED"); llamaDockerEnabled != "" {
+	if llamaDockerEnabled := os.Getenv("SFRP_LLAMACPP_DOCKER_ENABLED"); llamaDockerEnabled != "" {
 		if b, err := strconv.ParseBool(llamaDockerEnabled); err == nil {
 			if cfg.Backends.LlamaCpp.Docker == nil {
 				cfg.Backends.LlamaCpp.Docker = &DockerSettings{}
@@ -86,19 +86,19 @@ func loadEnvVars(cfg *AppConfig) {
 			cfg.Backends.LlamaCpp.Docker.Enabled = b
 		}
 	}
-	if llamaDockerImage := os.Getenv("LLAMADECK_LLAMACPP_DOCKER_IMAGE"); llamaDockerImage != "" {
+	if llamaDockerImage := os.Getenv("SFRP_LLAMACPP_DOCKER_IMAGE"); llamaDockerImage != "" {
 		if cfg.Backends.LlamaCpp.Docker == nil {
 			cfg.Backends.LlamaCpp.Docker = &DockerSettings{}
 		}
 		cfg.Backends.LlamaCpp.Docker.Image = llamaDockerImage
 	}
-	if llamaDockerArgs := os.Getenv("LLAMADECK_LLAMACPP_DOCKER_ARGS"); llamaDockerArgs != "" {
+	if llamaDockerArgs := os.Getenv("SFRP_LLAMACPP_DOCKER_ARGS"); llamaDockerArgs != "" {
 		if cfg.Backends.LlamaCpp.Docker == nil {
 			cfg.Backends.LlamaCpp.Docker = &DockerSettings{}
 		}
 		cfg.Backends.LlamaCpp.Docker.Args = strings.Split(llamaDockerArgs, " ")
 	}
-	if llamaDockerEnv := os.Getenv("LLAMADECK_LLAMACPP_DOCKER_ENV"); llamaDockerEnv != "" {
+	if llamaDockerEnv := os.Getenv("SFRP_LLAMACPP_DOCKER_ENV"); llamaDockerEnv != "" {
 		if cfg.Backends.LlamaCpp.Docker == nil {
 			cfg.Backends.LlamaCpp.Docker = &DockerSettings{}
 		}
@@ -107,39 +107,39 @@ func loadEnvVars(cfg *AppConfig) {
 		}
 		parseEnvVars(llamaDockerEnv, cfg.Backends.LlamaCpp.Docker.Environment)
 	}
-	if llamaEnv := os.Getenv("LLAMADECK_LLAMACPP_RESPONSE_HEADERS"); llamaEnv != "" {
+	if llamaEnv := os.Getenv("SFRP_LLAMACPP_RESPONSE_HEADERS"); llamaEnv != "" {
 		if cfg.Backends.LlamaCpp.ResponseHeaders == nil {
 			cfg.Backends.LlamaCpp.ResponseHeaders = make(map[string]string)
 		}
 		parseHeaders(llamaEnv, cfg.Backends.LlamaCpp.ResponseHeaders)
 	}
-	if llamaCacheDir := os.Getenv("LLAMADECK_LLAMACPP_CACHE_DIR"); llamaCacheDir != "" {
+	if llamaCacheDir := os.Getenv("SFRP_LLAMACPP_CACHE_DIR"); llamaCacheDir != "" {
 		cfg.Backends.LlamaCpp.CacheDir = llamaCacheDir
 	}
 	// Handle default llama.cpp env var
 	if llamaCacheDir := os.Getenv("LLAMA_CACHE"); llamaCacheDir != "" {
 		cfg.Backends.LlamaCpp.CacheDir = llamaCacheDir
 	}
-	if llamaDownloadTimeout := os.Getenv("LLAMADECK_LLAMACPP_DOWNLOAD_TIMEOUT"); llamaDownloadTimeout != "" {
+	if llamaDownloadTimeout := os.Getenv("SFRP_LLAMACPP_DOWNLOAD_TIMEOUT"); llamaDownloadTimeout != "" {
 		if t, err := strconv.Atoi(llamaDownloadTimeout); err == nil {
 			cfg.Backends.LlamaCpp.DownloadTimeout = time.Duration(t) * time.Second
 		}
 	}
 
 	// vLLM backend
-	if vllmCmd := os.Getenv("LLAMADECK_VLLM_COMMAND"); vllmCmd != "" {
+	if vllmCmd := os.Getenv("SFRP_VLLM_COMMAND"); vllmCmd != "" {
 		cfg.Backends.VLLM.Command = vllmCmd
 	}
-	if vllmArgs := os.Getenv("LLAMADECK_VLLM_ARGS"); vllmArgs != "" {
+	if vllmArgs := os.Getenv("SFRP_VLLM_ARGS"); vllmArgs != "" {
 		cfg.Backends.VLLM.Args = strings.Split(vllmArgs, " ")
 	}
-	if vllmEnv := os.Getenv("LLAMADECK_VLLM_ENV"); vllmEnv != "" {
+	if vllmEnv := os.Getenv("SFRP_VLLM_ENV"); vllmEnv != "" {
 		if cfg.Backends.VLLM.Environment == nil {
 			cfg.Backends.VLLM.Environment = make(map[string]string)
 		}
 		parseEnvVars(vllmEnv, cfg.Backends.VLLM.Environment)
 	}
-	if vllmDockerEnabled := os.Getenv("LLAMADECK_VLLM_DOCKER_ENABLED"); vllmDockerEnabled != "" {
+	if vllmDockerEnabled := os.Getenv("SFRP_VLLM_DOCKER_ENABLED"); vllmDockerEnabled != "" {
 		if b, err := strconv.ParseBool(vllmDockerEnabled); err == nil {
 			if cfg.Backends.VLLM.Docker == nil {
 				cfg.Backends.VLLM.Docker = &DockerSettings{}
@@ -147,19 +147,19 @@ func loadEnvVars(cfg *AppConfig) {
 			cfg.Backends.VLLM.Docker.Enabled = b
 		}
 	}
-	if vllmDockerImage := os.Getenv("LLAMADECK_VLLM_DOCKER_IMAGE"); vllmDockerImage != "" {
+	if vllmDockerImage := os.Getenv("SFRP_VLLM_DOCKER_IMAGE"); vllmDockerImage != "" {
 		if cfg.Backends.VLLM.Docker == nil {
 			cfg.Backends.VLLM.Docker = &DockerSettings{}
 		}
 		cfg.Backends.VLLM.Docker.Image = vllmDockerImage
 	}
-	if vllmDockerArgs := os.Getenv("LLAMADECK_VLLM_DOCKER_ARGS"); vllmDockerArgs != "" {
+	if vllmDockerArgs := os.Getenv("SFRP_VLLM_DOCKER_ARGS"); vllmDockerArgs != "" {
 		if cfg.Backends.VLLM.Docker == nil {
 			cfg.Backends.VLLM.Docker = &DockerSettings{}
 		}
 		cfg.Backends.VLLM.Docker.Args = strings.Split(vllmDockerArgs, " ")
 	}
-	if vllmDockerEnv := os.Getenv("LLAMADECK_VLLM_DOCKER_ENV"); vllmDockerEnv != "" {
+	if vllmDockerEnv := os.Getenv("SFRP_VLLM_DOCKER_ENV"); vllmDockerEnv != "" {
 		if cfg.Backends.VLLM.Docker == nil {
 			cfg.Backends.VLLM.Docker = &DockerSettings{}
 		}
@@ -168,7 +168,7 @@ func loadEnvVars(cfg *AppConfig) {
 		}
 		parseEnvVars(vllmDockerEnv, cfg.Backends.VLLM.Docker.Environment)
 	}
-	if llamaEnv := os.Getenv("LLAMADECK_VLLM_RESPONSE_HEADERS"); llamaEnv != "" {
+	if llamaEnv := os.Getenv("SFRP_VLLM_RESPONSE_HEADERS"); llamaEnv != "" {
 		if cfg.Backends.VLLM.ResponseHeaders == nil {
 			cfg.Backends.VLLM.ResponseHeaders = make(map[string]string)
 		}
@@ -176,19 +176,19 @@ func loadEnvVars(cfg *AppConfig) {
 	}
 
 	// MLX backend
-	if mlxCmd := os.Getenv("LLAMADECK_MLX_COMMAND"); mlxCmd != "" {
+	if mlxCmd := os.Getenv("SFRP_MLX_COMMAND"); mlxCmd != "" {
 		cfg.Backends.MLX.Command = mlxCmd
 	}
-	if mlxArgs := os.Getenv("LLAMADECK_MLX_ARGS"); mlxArgs != "" {
+	if mlxArgs := os.Getenv("SFRP_MLX_ARGS"); mlxArgs != "" {
 		cfg.Backends.MLX.Args = strings.Split(mlxArgs, " ")
 	}
-	if mlxEnv := os.Getenv("LLAMADECK_MLX_ENV"); mlxEnv != "" {
+	if mlxEnv := os.Getenv("SFRP_MLX_ENV"); mlxEnv != "" {
 		if cfg.Backends.MLX.Environment == nil {
 			cfg.Backends.MLX.Environment = make(map[string]string)
 		}
 		parseEnvVars(mlxEnv, cfg.Backends.MLX.Environment)
 	}
-	if llamaEnv := os.Getenv("LLAMADECK_MLX_RESPONSE_HEADERS"); llamaEnv != "" {
+	if llamaEnv := os.Getenv("SFRP_MLX_RESPONSE_HEADERS"); llamaEnv != "" {
 		if cfg.Backends.MLX.ResponseHeaders == nil {
 			cfg.Backends.MLX.ResponseHeaders = make(map[string]string)
 		}
@@ -196,126 +196,126 @@ func loadEnvVars(cfg *AppConfig) {
 	}
 
 	// Instance defaults
-	if idleTimeout := os.Getenv("LLAMADECK_DEFAULT_IDLE_TIMEOUT"); idleTimeout != "" {
+	if idleTimeout := os.Getenv("SFRP_DEFAULT_IDLE_TIMEOUT"); idleTimeout != "" {
 		if minutes, err := strconv.Atoi(idleTimeout); err == nil {
 			cfg.Instances.DefaultIdleTimeout = minutes
 		}
 	}
-	if autoRestart := os.Getenv("LLAMADECK_DEFAULT_AUTO_RESTART"); autoRestart != "" {
+	if autoRestart := os.Getenv("SFRP_DEFAULT_AUTO_RESTART"); autoRestart != "" {
 		if b, err := strconv.ParseBool(autoRestart); err == nil {
 			cfg.Instances.DefaultAutoRestart = b
 		}
 	}
-	if maxRestarts := os.Getenv("LLAMADECK_DEFAULT_MAX_RESTARTS"); maxRestarts != "" {
+	if maxRestarts := os.Getenv("SFRP_DEFAULT_MAX_RESTARTS"); maxRestarts != "" {
 		if m, err := strconv.Atoi(maxRestarts); err == nil {
 			cfg.Instances.DefaultMaxRestarts = m
 		}
 	}
-	if restartDelay := os.Getenv("LLAMADECK_DEFAULT_RESTART_DELAY"); restartDelay != "" {
+	if restartDelay := os.Getenv("SFRP_DEFAULT_RESTART_DELAY"); restartDelay != "" {
 		if seconds, err := strconv.Atoi(restartDelay); err == nil {
 			cfg.Instances.DefaultRestartDelay = seconds
 		}
 	}
-	if onDemandStart := os.Getenv("LLAMADECK_DEFAULT_ON_DEMAND_START"); onDemandStart != "" {
+	if onDemandStart := os.Getenv("SFRP_DEFAULT_ON_DEMAND_START"); onDemandStart != "" {
 		if b, err := strconv.ParseBool(onDemandStart); err == nil {
 			cfg.Instances.DefaultOnDemandStart = b
 		}
 	}
-	if onDemandTimeout := os.Getenv("LLAMADECK_ON_DEMAND_START_TIMEOUT"); onDemandTimeout != "" {
+	if onDemandTimeout := os.Getenv("SFRP_ON_DEMAND_START_TIMEOUT"); onDemandTimeout != "" {
 		if seconds, err := strconv.Atoi(onDemandTimeout); err == nil {
 			cfg.Instances.OnDemandStartTimeout = seconds
 		}
 	}
-	if timeoutCheckInterval := os.Getenv("LLAMADECK_TIMEOUT_CHECK_INTERVAL"); timeoutCheckInterval != "" {
+	if timeoutCheckInterval := os.Getenv("SFRP_TIMEOUT_CHECK_INTERVAL"); timeoutCheckInterval != "" {
 		if minutes, err := strconv.Atoi(timeoutCheckInterval); err == nil {
 			cfg.Instances.TimeoutCheckInterval = minutes
 		}
 	}
 	// Auth config
-	if requireInferenceAuth := os.Getenv("LLAMADECK_REQUIRE_INFERENCE_AUTH"); requireInferenceAuth != "" {
+	if requireInferenceAuth := os.Getenv("SFRP_REQUIRE_INFERENCE_AUTH"); requireInferenceAuth != "" {
 		if b, err := strconv.ParseBool(requireInferenceAuth); err == nil {
 			cfg.Auth.RequireInferenceAuth = b
 		}
 	}
-	if requireManagementAuth := os.Getenv("LLAMADECK_REQUIRE_MANAGEMENT_AUTH"); requireManagementAuth != "" {
+	if requireManagementAuth := os.Getenv("SFRP_REQUIRE_MANAGEMENT_AUTH"); requireManagementAuth != "" {
 		if b, err := strconv.ParseBool(requireManagementAuth); err == nil {
 			cfg.Auth.RequireManagementAuth = b
 		}
 	}
-	if managementKeys := os.Getenv("LLAMADECK_MANAGEMENT_KEYS"); managementKeys != "" {
+	if managementKeys := os.Getenv("SFRP_MANAGEMENT_KEYS"); managementKeys != "" {
 		cfg.Auth.ManagementKeys = strings.Split(managementKeys, ",")
 	}
 
 	// OIDC config
-	if v := os.Getenv("LLAMADECK_AUTH_OIDC_ISSUER_URL"); v != "" {
+	if v := os.Getenv("SFRP_AUTH_OIDC_ISSUER_URL"); v != "" {
 		cfg.Auth.OIDC.IssuerURL = v
 	}
-	if v := os.Getenv("LLAMADECK_AUTH_OIDC_CLIENT_ID"); v != "" {
+	if v := os.Getenv("SFRP_AUTH_OIDC_CLIENT_ID"); v != "" {
 		cfg.Auth.OIDC.ClientID = v
 	}
-	if v := os.Getenv("LLAMADECK_AUTH_OIDC_CLIENT_SECRET"); v != "" {
+	if v := os.Getenv("SFRP_AUTH_OIDC_CLIENT_SECRET"); v != "" {
 		cfg.Auth.OIDC.ClientSecret = v
 	}
-	if v := os.Getenv("LLAMADECK_AUTH_OIDC_REDIRECT_URL"); v != "" {
+	if v := os.Getenv("SFRP_AUTH_OIDC_REDIRECT_URL"); v != "" {
 		cfg.Auth.OIDC.RedirectURL = v
 	}
-	if v := os.Getenv("LLAMADECK_AUTH_OIDC_SCOPES"); v != "" {
+	if v := os.Getenv("SFRP_AUTH_OIDC_SCOPES"); v != "" {
 		cfg.Auth.OIDC.Scopes = strings.Split(v, ",")
 	}
-	if v := os.Getenv("LLAMADECK_AUTH_OIDC_ALLOWED_GROUPS"); v != "" {
+	if v := os.Getenv("SFRP_AUTH_OIDC_ALLOWED_GROUPS"); v != "" {
 		cfg.Auth.OIDC.AllowedGroups = strings.Split(v, ",")
 	}
-	if v := os.Getenv("LLAMADECK_AUTH_OIDC_GROUPS_CLAIM"); v != "" {
+	if v := os.Getenv("SFRP_AUTH_OIDC_GROUPS_CLAIM"); v != "" {
 		cfg.Auth.OIDC.GroupsClaim = v
 	}
-	if v := os.Getenv("LLAMADECK_AUTH_OIDC_SESSION_TTL"); v != "" {
+	if v := os.Getenv("SFRP_AUTH_OIDC_SESSION_TTL"); v != "" {
 		if d, err := time.ParseDuration(v); err == nil {
 			cfg.Auth.OIDC.SessionTTL = d
 		}
 	}
-	if v := os.Getenv("LLAMADECK_AUTH_OIDC_SECURE_COOKIE"); v != "" {
+	if v := os.Getenv("SFRP_AUTH_OIDC_SECURE_COOKIE"); v != "" {
 		if b, err := strconv.ParseBool(v); err == nil {
 			cfg.Auth.OIDC.SecureCookie = b
 		}
 	}
 
 	// Local node config
-	if localNode := os.Getenv("LLAMADECK_LOCAL_NODE"); localNode != "" {
+	if localNode := os.Getenv("SFRP_LOCAL_NODE"); localNode != "" {
 		cfg.LocalNode = localNode
 	}
 
 	// Database config
-	if dbPath := os.Getenv("LLAMADECK_DATABASE_PATH"); dbPath != "" {
+	if dbPath := os.Getenv("SFRP_DATABASE_PATH"); dbPath != "" {
 		cfg.Database.Path = dbPath
 	}
-	if maxOpenConns := os.Getenv("LLAMADECK_DATABASE_MAX_OPEN_CONNECTIONS"); maxOpenConns != "" {
+	if maxOpenConns := os.Getenv("SFRP_DATABASE_MAX_OPEN_CONNECTIONS"); maxOpenConns != "" {
 		if m, err := strconv.Atoi(maxOpenConns); err == nil {
 			cfg.Database.MaxOpenConnections = m
 		}
 	}
-	if maxIdleConns := os.Getenv("LLAMADECK_DATABASE_MAX_IDLE_CONNECTIONS"); maxIdleConns != "" {
+	if maxIdleConns := os.Getenv("SFRP_DATABASE_MAX_IDLE_CONNECTIONS"); maxIdleConns != "" {
 		if m, err := strconv.Atoi(maxIdleConns); err == nil {
 			cfg.Database.MaxIdleConnections = m
 		}
 	}
-	if connMaxLifetime := os.Getenv("LLAMADECK_DATABASE_CONN_MAX_LIFETIME"); connMaxLifetime != "" {
+	if connMaxLifetime := os.Getenv("SFRP_DATABASE_CONN_MAX_LIFETIME"); connMaxLifetime != "" {
 		if d, err := time.ParseDuration(connMaxLifetime); err == nil {
 			cfg.Database.ConnMaxLifetime = d
 		}
 	}
 
 	// Log rotation config
-	if logRotationEnabled := os.Getenv("LLAMADECK_LOG_ROTATION_ENABLED"); logRotationEnabled != "" {
+	if logRotationEnabled := os.Getenv("SFRP_LOG_ROTATION_ENABLED"); logRotationEnabled != "" {
 		if b, err := strconv.ParseBool(logRotationEnabled); err == nil {
 			cfg.Instances.LogRotationEnabled = b
 		}
 	}
-	if logRotationMaxSize := os.Getenv("LLAMADECK_LOG_ROTATION_MAX_SIZE"); logRotationMaxSize != "" {
+	if logRotationMaxSize := os.Getenv("SFRP_LOG_ROTATION_MAX_SIZE"); logRotationMaxSize != "" {
 		if m, err := strconv.Atoi(logRotationMaxSize); err == nil {
 			cfg.Instances.LogRotationMaxSize = m
 		}
 	}
-	if logRotationCompress := os.Getenv("LLAMADECK_LOG_ROTATION_COMPRESS"); logRotationCompress != "" {
+	if logRotationCompress := os.Getenv("SFRP_LOG_ROTATION_COMPRESS"); logRotationCompress != "" {
 		if b, err := strconv.ParseBool(logRotationCompress); err == nil {
 			cfg.Instances.LogRotationCompress = b
 		}

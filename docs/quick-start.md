@@ -1,6 +1,6 @@
 # Quick Start
 
-This guide will help you get Llamadeck up and running in just a few minutes.
+This guide will help you get SFRP up and running in just a few minutes.
 
 **Before you begin:** Ensure you have at least one backend installed (llama.cpp, MLX, or vLLM). See the [Installation Guide](installation.md#prerequisites) for backend setup.
 
@@ -11,23 +11,23 @@ Before you start, let's clarify a few key terms:
 - **Instance**: A running backend server that serves a specific model. Each instance has a unique name and runs independently.
 - **Backend**: The inference engine that actually runs the model (llama.cpp, MLX, or vLLM). You need at least one backend installed before creating instances.
 - **Node**: In multi-machine setups, a node represents one machine. Most users will just use the default "main" node for single-machine deployments.
-- **Proxy Architecture**: Llamadeck acts as a proxy in front of your instances. You make requests to llamadeck (e.g., `http://localhost:8080/v1/chat/completions`), and it routes them to the appropriate backend instance. This means you don't need to track individual instance ports or endpoints.
+- **Proxy Architecture**: SFRP acts as a proxy in front of your instances. You make requests to sfrp (e.g., `http://localhost:8080/v1/chat/completions`), and it routes them to the appropriate backend instance. This means you don't need to track individual instance ports or endpoints.
 
 ## Authentication
 
-Llamadeck uses two types of API keys:
+SFRP uses two types of API keys:
 
-- **Management API Key**: Used to authenticate with the Llamadeck management API and web UI. If not configured, one is auto-generated at startup and printed to the terminal.
+- **Management API Key**: Used to authenticate with the SFRP management API and web UI. If not configured, one is auto-generated at startup and printed to the terminal.
 - **Inference API Key**: Used to authenticate requests to the OpenAI-compatible endpoints (`/v1/chat/completions`, `/v1/completions`, etc.). These are created and managed via the web UI.
 
 By default, authentication is required for both management and inference endpoints. You can configure custom management keys or disable authentication in the [Configuration](configuration.md) guide.
 
-## Start Llamadeck
+## Start SFRP
 
-Start the Llamadeck server:
+Start the SFRP server:
 
 ```bash
-llamadeck
+sfrp
 ```
 
 ```
@@ -45,12 +45,12 @@ llamadeck
 • For production, add explicit management_keys to your configuration
 • Copy this key before it disappears from the terminal
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Llamadeck server listening on 0.0.0.0:8080
+SFRP server listening on 0.0.0.0:8080
 ```
 
 Copy the **Management API Key** from the terminal - you'll need it to access the web UI.
 
-By default, Llamadeck will start on `http://localhost:8080`.
+By default, SFRP will start on `http://localhost:8080`.
 
 ## Access the Web UI
 
@@ -62,7 +62,7 @@ http://localhost:8080
 
 Login with the management API key from the terminal output.
 
-You should see the Llamadeck web interface.
+You should see the SFRP web interface.
 
 ## Create Your First Instance
 
@@ -75,7 +75,7 @@ You should see the Llamadeck web interface.
      - **Additional Options**: Backend-specific parameters
 
     !!! tip "Auto-Assignment"
-        Llamadeck automatically assigns ports from the configured port range (default: 8000-9000) and manages API keys if authentication is enabled. You typically don't need to manually specify these values.
+        SFRP automatically assigns ports from the configured port range (default: 8000-9000) and manages API keys if authentication is enabled. You typically don't need to manually specify these values.
 
     !!! note "Remote Node Deployment"
         If you have configured remote nodes in your configuration file, you can select which node to deploy the instance to. This allows you to distribute instances across multiple machines. See the [Configuration](configuration.md#remote-node-configuration) guide for details on setting up remote nodes.
@@ -105,7 +105,7 @@ To make inference requests to your instances, you'll need an inference API key:
 5. Click **Create**
 6. **Copy the generated key** - it will only be shown once!
 
-The key will look like: `llamadeck-...`
+The key will look like: `sfrp-...`
 
 You can create multiple inference keys with different permissions for different use cases (e.g., one for development, one for production, or keys limited to specific instances).
 
@@ -171,7 +171,7 @@ Here are basic example configurations for each backend:
 
 ## Docker Support
 
-Llamadeck can run backends in Docker containers. To enable Docker for a backend, add a `docker` section to that backend in your YAML configuration file (e.g. `config.yaml`) as shown below:
+SFRP can run backends in Docker containers. To enable Docker for a backend, add a `docker` section to that backend in your YAML configuration file (e.g. `config.yaml`) as shown below:
 
 ```yaml
 backends:
@@ -208,7 +208,7 @@ curl -X POST http://localhost:8080/api/v1/instances/my-model/start
 
 ## OpenAI Compatible API
 
-Llamadeck provides OpenAI-compatible endpoints, making it easy to integrate with existing OpenAI client libraries and tools.
+SFRP provides OpenAI-compatible endpoints, making it easy to integrate with existing OpenAI client libraries and tools.
 
 ### Chat Completions
 
@@ -237,7 +237,7 @@ You can also use the official OpenAI Python client:
 ```python
 from openai import OpenAI
 
-# Point the client to your Llamadeck server
+# Point the client to your SFRP server
 client = OpenAI(
     base_url="http://localhost:8080/v1",
     api_key="your-inference-api-key"  # Use the inference API key from terminal or config

@@ -1679,11 +1679,11 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Returns the version of the llamadeck command",
+                "description": "Returns the version of the sfrp command",
                 "tags": [
                     "System"
                 ],
-                "summary": "Get llamadeck version",
+                "summary": "Get sfrp version",
                 "responses": {
                     "200": {
                         "description": "Version information",
@@ -2352,7 +2352,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "data_dir": {
-                    "description": "Directory where all llamadeck data will be stored (database, instances, logs, etc.)",
+                    "description": "Directory where all sfrp data will be stored (database, instances, logs, etc.)",
                     "type": "string"
                 },
                 "database": {
@@ -2628,7 +2628,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "issuer_url": {
-                    "description": "Issuer URL of the IdP, e.g. https://authentik.example/application/o/llamadeck/",
+                    "description": "Issuer URL of the IdP, e.g. https://authentik.example/application/o/sfrp/",
                     "type": "string"
                 },
                 "redirect_url": {
@@ -3117,8 +3117,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "llamadeck API",
-	Description:      "llamadeck is a control server for managing Llama Server instances.",
+	Title:            "sfrp API",
+	Description:      "sfrp is a control server for managing Llama Server instances.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

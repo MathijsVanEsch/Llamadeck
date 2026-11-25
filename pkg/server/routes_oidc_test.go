@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"llamadeck/pkg/auth"
-	"llamadeck/pkg/config"
+	"sfrp/pkg/auth"
+	"sfrp/pkg/config"
 )
 
 // TestRoutesOIDCBypassManagementAuth verifies the router (not just the

@@ -1,7 +1,7 @@
 {
-  "name": "llamadeck-ui",
+  "name": "sfrp-ui",
   "version": "0.0.0",
-  "description": "Llamadeck UI",
+  "description": "SFRP UI",
   "license": "MIT",
   "author": "Matus Namesny",
   "type": "module",

@@ -3,9 +3,9 @@ package manager
 import (
 	"context"
 	"fmt"
-	"llamadeck/pkg/backends"
-	"llamadeck/pkg/instance"
-	"llamadeck/pkg/validation"
+	"sfrp/pkg/backends"
+	"sfrp/pkg/instance"
+	"sfrp/pkg/validation"
 	"log"
 	"slices"
 	"strings"

@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"llamadeck/pkg/backends"
-	"llamadeck/pkg/instance"
-	"llamadeck/pkg/validation"
+	"sfrp/pkg/backends"
+	"sfrp/pkg/instance"
+	"sfrp/pkg/validation"
 	"log"
 	"net/http"
 	"strings"
@@ -124,7 +124,7 @@ func (h *Handler) OpenAIListInstances() http.HandlerFunc {
 				ID:      inst.Name,
 				Object:  "model",
 				Created: inst.Created,
-				OwnedBy: "llamadeck",
+				OwnedBy: "sfrp",
 			})
 		}
 
