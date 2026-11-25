@@ -216,9 +216,9 @@ const SystemInfoDialog: React.FC<SystemInfoDialogProps> = ({
 
         <div className="flex-1 overflow-y-auto">
           <div className="space-y-6">
-            {/* Llamadeck Version Section - Always shown */}
+            {/* SFRP Version Section - Always shown */}
             <div className="space-y-3">
-              <h3 className="font-semibold">Llamadeck Version</h3>
+              <h3 className="font-semibold">SFRP Version</h3>
               <div className="bg-gray-900 rounded-lg p-4">
                 <pre className="text-sm text-gray-300 whitespace-pre-wrap font-mono">
                   {getAppVersion()}
